@@ -1,0 +1,192 @@
+src
+- components
+- - HeroSection
+- - - App.jsx
+- - - Index.jsx
+- App.jsx
+- main.jsx
+
+
+package.json
+{
+  "name": "abc_designs",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "lint": "eslint .",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@react-three/fiber": "^9.4.2",
+    "@tailwindcss/vite": "^4.1.18",
+    "@types/three": "^0.182.0",
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0",
+    "tailwindcss": "^4.1.18",
+    "three": "^0.182.0"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.39.1",
+    "@types/react": "^19.2.5",
+    "@types/react-dom": "^19.2.3",
+    "@vitejs/plugin-react": "^5.1.1",
+    "eslint": "^9.39.1",
+    "eslint-plugin-react-hooks": "^7.0.1",
+    "eslint-plugin-react-refresh": "^0.4.24",
+    "globals": "^16.5.0",
+    "vite": "^7.2.4"
+  }
+}
+
+
+components/HeroSection/App.jsx
+import { useState, useTransition } from "react";
+import { useControls } from "leva";
+import { Canvas } from "@react-three/fiber";
+import {
+  AccumulativeShadows,
+  RandomizedLight,
+  Center,
+  Environment,
+  OrbitControls,
+} from "@react-three/drei";
+
+export default function App() {
+  return (
+    <Canvas shadows camera={{ position: [0, 0, 4.5], fov: 50 }}>
+      <group position={[0, -0.65, 0]}>
+        <Sphere />
+        <AccumulativeShadows
+          temporal
+          frames={200}
+          color="purple"
+          colorBlend={0.5}
+          opacity={1}
+          scale={10}
+          alphaTest={0.85}
+        >
+          <RandomizedLight
+            amount={8}
+            radius={5}
+            ambient={0.5}
+            position={[5, 3, 2]}
+            bias={0.001}
+          />
+        </AccumulativeShadows>
+      </group>
+      <Env />
+      <OrbitControls
+        autoRotate
+        autoRotateSpeed={4}
+        enablePan={false}
+        enableZoom={false}
+        minPolarAngle={Math.PI / 2.1}
+        maxPolarAngle={Math.PI / 2.1}
+      />
+    </Canvas>
+  );
+}
+
+function Sphere() {
+  const { roughness } = useControls({
+    roughness: { value: 1, min: 0, max: 1 },
+  });
+  return (
+    <Center top>
+      <mesh castShadow>
+        <sphereGeometry args={[0.75, 64, 64]} />
+        <meshStandardMaterial metalness={1} roughness={roughness} />
+      </mesh>
+    </Center>
+  );
+}
+
+function Env() {
+  const [preset, setPreset] = useState("sunset");
+  // You can use the "inTransition" boolean to react to the loading in-between state,
+  // For instance by showing a message
+  const [inTransition, startTransition] = useTransition();
+  const { blur } = useControls({
+    blur: { value: 0.65, min: 0, max: 1 },
+    preset: {
+      value: preset,
+      options: [
+        "sunset",
+        "dawn",
+        "night",
+        "warehouse",
+        "forest",
+        "apartment",
+        "studio",
+        "city",
+        "park",
+        "lobby",
+      ],
+      // If onChange is present the value will not be reactive, see https://github.com/pmndrs/leva/blob/main/docs/advanced/controlled-inputs.md#onchange
+      // Instead we transition the preset value, which will prevents the suspense bound from triggering its fallback
+      // That way we can hang onto the current environment until the new one has finished loading ...
+      onChange: (value) => startTransition(() => setPreset(value)),
+    },
+  });
+  return <Environment preset={preset} background blur={blur} />;
+}
+
+
+components/HeroSection/index.jsx
+import { createRoot } from "react-dom/client";
+import "./styles.css";
+import App from "./App";
+import { Leva } from "leva";
+import { Logo } from "@pmndrs/branding";
+
+function Overlay() {
+  return (
+    <div
+      style={{
+        position: "absolute",
+        top: 0,
+        left: 0,
+        pointerEvents: "none",
+        width: "100%",
+        height: "100%",
+      }}
+    >
+      <a
+        href="https://pmnd.rs/"
+        style={{ position: "absolute", bottom: 40, left: 90, fontSize: "13px" }}
+      >
+        pmnd.rs
+        <br />
+        dev collective
+      </a>
+      <div
+        style={{ position: "absolute", top: 40, left: 40, fontSize: "13px" }}
+      >
+        😄 —
+      </div>
+      <div
+        style={{
+          position: "absolute",
+          bottom: 40,
+          right: 40,
+          fontSize: "13px",
+        }}
+      >
+        30/10/2022
+      </div>
+    </div>
+  );
+}
+
+createRoot(document.getElementById("root")).render(
+  <>
+    <App />
+    <Overlay />
+    <Logo style={{ position: "absolute", bottom: 40, left: 40, width: 30 }} />
+    <Leva collapsed />
+  </>
+);
+
