@@ -1,50 +1,31 @@
+public
+- - models
+- - - rock.glb
 src
 - components
+- - TestModel.jsx
+- - Header
+- - - Navbar.jsx
+- assets
+- - fonts
+- - - rf-dewi
+- - - - RFDewi-Light.ttf
 - - HeroSection
-- - - App.jsx
-- - - Index.jsx
+- - - HeroSection.jsx
+- - ThreeD
+- - - Scene.jsx
+- - - styles.css
+- - ui
+- - - Text
+- - - Shuffle.jsx
+- - - - Text.jsx
 - App.jsx
+- App.css
+- index.css
 - main.jsx
 
-
-package.json
-{
-  "name": "abc_designs",
-  "private": true,
-  "version": "0.0.0",
-  "type": "module",
-  "scripts": {
-    "dev": "vite",
-    "build": "vite build",
-    "lint": "eslint .",
-    "preview": "vite preview"
-  },
-  "dependencies": {
-    "@react-three/fiber": "^9.4.2",
-    "@tailwindcss/vite": "^4.1.18",
-    "@types/three": "^0.182.0",
-    "react": "^19.2.0",
-    "react-dom": "^19.2.0",
-    "tailwindcss": "^4.1.18",
-    "three": "^0.182.0"
-  },
-  "devDependencies": {
-    "@eslint/js": "^9.39.1",
-    "@types/react": "^19.2.5",
-    "@types/react-dom": "^19.2.3",
-    "@vitejs/plugin-react": "^5.1.1",
-    "eslint": "^9.39.1",
-    "eslint-plugin-react-hooks": "^7.0.1",
-    "eslint-plugin-react-refresh": "^0.4.24",
-    "globals": "^16.5.0",
-    "vite": "^7.2.4"
-  }
-}
-
-
-components/HeroSection/App.jsx
+- - - Scene.jsx
 import { useState, useTransition } from "react";
-import { useControls } from "leva";
 import { Canvas } from "@react-three/fiber";
 import {
   AccumulativeShadows,
@@ -91,9 +72,8 @@ export default function App() {
 }
 
 function Sphere() {
-  const { roughness } = useControls({
-    roughness: { value: 1, min: 0, max: 1 },
-  });
+  const roughness = 1;
+
   return (
     <Center top>
       <mesh castShadow>
@@ -109,84 +89,273 @@ function Env() {
   // You can use the "inTransition" boolean to react to the loading in-between state,
   // For instance by showing a message
   const [inTransition, startTransition] = useTransition();
-  const { blur } = useControls({
-    blur: { value: 0.65, min: 0, max: 1 },
-    preset: {
-      value: preset,
-      options: [
-        "sunset",
-        "dawn",
-        "night",
-        "warehouse",
-        "forest",
-        "apartment",
-        "studio",
-        "city",
-        "park",
-        "lobby",
-      ],
-      // If onChange is present the value will not be reactive, see https://github.com/pmndrs/leva/blob/main/docs/advanced/controlled-inputs.md#onchange
-      // Instead we transition the preset value, which will prevents the suspense bound from triggering its fallback
-      // That way we can hang onto the current environment until the new one has finished loading ...
-      onChange: (value) => startTransition(() => setPreset(value)),
-    },
-  });
+  const blur = 0.65;
+
   return <Environment preset={preset} background blur={blur} />;
 }
 
+style.css
+@import url("https://rsms.me/inter/inter.css");
 
-components/HeroSection/index.jsx
-import { createRoot } from "react-dom/client";
-import "./styles.css";
-import App from "./App";
-import { Leva } from "leva";
-import { Logo } from "@pmndrs/branding";
+/* ============================
+   3D HERO SECTION ONLY
+============================ */
 
-function Overlay() {
+#root > div {
+  width: 100%;
+  height: 100vh !important; /* ✅ Full viewport height */
+}
+
+.hero-3d {
+  width: 100%;
+  height: 100vh; /* ✅ Full viewport height */
+  position: relative;
+  overflow: hidden;
+  background: #f5f5f5;
+  font-family: "Inter var", sans-serif;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  color: black;
+}
+
+/* Only elements INSIDE hero-3d */
+.hero-3d *,
+.hero-3d *::before,
+.hero-3d *::after {
+  box-sizing: border-box;
+}
+
+/* Canvas must fill the hero */
+.hero-3d canvas {
+  width: 100% !important;
+  height: 100% !important;
+  display: block;
+}
+
+/* Links inside hero only */
+.hero-3d a {
+  pointer-events: all;
+  color: black;
+  text-decoration: none;
+}
+
+/* SVGs inside hero only */
+.hero-3d svg {
+  fill: black;
+}
+
+
+Navbar.jsx
+import React, { useState } from "react";
+import Text from "../ui/Text/Text";
+// import Hamburger from "../icons/Hamburger";
+// import Shuffle from "../ui/Text/Shuffle";
+
+function Navbar() {
+  const [hamBurger, setHamburger] = useState(true);
+
+  const handleNavbar = () => {
+    setHamburger((prev) => !prev);
+  };
+
+  const navlinks = ["about", "awards", "works", "expertise", "contact"];
   return (
-    <div
-      style={{
-        position: "absolute",
-        top: 0,
-        left: 0,
-        pointerEvents: "none",
-        width: "100%",
-        height: "100%",
-      }}
-    >
-      <a
-        href="https://pmnd.rs/"
-        style={{ position: "absolute", bottom: 40, left: 90, fontSize: "13px" }}
-      >
-        pmnd.rs
-        <br />
-        dev collective
-      </a>
-      <div
-        style={{ position: "absolute", top: 40, left: 40, fontSize: "13px" }}
-      >
-        😄 —
+    <header className="fixed top-0 left-0 w-full px-2.5 md:px-28 py-2.5 md:py-8 flex items-center justify-between z-50">
+      <div>
+        <a href="#" className="uppercase relative z-50">
+          {/* max milkin */}
+          <Text name="max milkin" fontSize="text-2xl font-semibold" />
+        </a>
       </div>
-      <div
-        style={{
-          position: "absolute",
-          bottom: 40,
-          right: 40,
-          fontSize: "13px",
-        }}
+      <nav className="hidden md:block">
+        <ul className="flex gap-18">
+          {navlinks.map((value, index) => {
+            return (
+              <li key={index}>
+                <Text
+                  name={value}
+                  fontSize="text-xs md:text-[11.2px] font-medium"
+                />
+              </li>
+            );
+          })}
+        </ul>
+      </nav>
+      <nav
+        className={`flex items-center justify-center md:hidden absolute top-0 ${
+          hamBurger
+            ? "left-0 transition-all"
+            : "-left-full -translate-x-full transition-all"
+        } w-full h-screen`}
       >
-        30/10/2022
+        <ul className="flex flex-col gap-18 items-center">
+          {navlinks.map((value, index) => {
+            return (
+              <li key={index}>
+                <Text
+                  name={value}
+                  fontSize="text-xs md:text-[11.2px] font-medium"
+                />
+              </li>
+            );
+          })}
+        </ul>
+      </nav>
+      <button
+        className="block md:hidden absolute top-2.5 right-2.5 z-50 m-0 p-0"
+        onClick={handleNavbar}
+      >
+        <svg
+          class={`ham hamRotate ham1 ${hamBurger === true ? "active" : ""}`}
+          viewBox="0 0 100 100"
+          width="80"
+
+          // onclick="this.classList.toggle('active')"
+        >
+          <path
+            class="line top"
+            d="m 30,33 h 40 c 0,0 9.044436,-0.654587 9.044436,-8.508902 0,-7.854315 -8.024349,-11.958003 -14.89975,-10.85914 -6.875401,1.098863 -13.637059,4.171617 -13.637059,16.368042 v 40"
+          />
+          <path class="line middle" d="m 30,50 h 40" />
+          <path
+            class="line bottom"
+            d="m 30,67 h 40 c 12.796276,0 15.357889,-11.717785 15.357889,-26.851538 0,-15.133752 -4.786586,-27.274118 -16.667516,-27.274118 -11.88093,0 -18.499247,6.994427 -18.435284,17.125656 l 0.252538,40"
+          />
+        </svg>
+        {/* <Hamburger className={hamBurger === true ? ".active" : ""} /> */}
+      </button>
+    </header>
+  );
+}
+
+export default Navbar;
+
+HeroSection.jsx
+// import Scene from "../ThreeD/Scene";
+import "../ThreeD/styles.css";
+import Text from "../ui/Text/Text";
+
+function HeroSection() {
+  return (
+    <div>
+      {/* <Scene /> */}
+      <div className="absolute top-1/2 left-1/2 -translate-1/2 w-fit z-50">
+        <h1 className="text-sm text-cyan-900">
+          <Text value="Minimalism is not emptiness," fontSize="hi" />
+          <Text value="its" fontSize="hi" />
+          <Text value="essence." fontSize="hi" />
+        </h1>
       </div>
     </div>
   );
 }
 
-createRoot(document.getElementById("root")).render(
-  <>
-    <App />
-    <Overlay />
-    <Logo style={{ position: "absolute", bottom: 40, left: 40, width: 30 }} />
-    <Leva collapsed />
-  </>
-);
+export default HeroSection;
 
+Text.jsx
+import Shuffle from "./Shuffle";
+
+function Text({ name, fontSize }) {
+  return (
+    <Shuffle
+      text={name}
+      className={`uppercase ${fontSize} tracking-wide`}
+      shuffleDirection="right"
+      duration={0.35}
+      shuffleTimes={1}
+      ease="power3.out"
+      stagger={0.03}
+      triggerOnce={true}
+      triggerOnHover={true}
+      respectReducedMotion={true}
+    />
+  );
+}
+
+export default Text;
+
+
+Navbar
+import React, { useState } from "react";
+import Text from "../ui/Text/Text";
+// import Hamburger from "../icons/Hamburger";
+// import Shuffle from "../ui/Text/Shuffle";
+
+function Navbar() {
+  const [hamBurger, setHamburger] = useState(true);
+
+  const handleNavbar = () => {
+    setHamburger((prev) => !prev);
+  };
+
+  const navlinks = ["about", "awards", "works", "expertise", "contact"];
+  return (
+    <header className="fixed top-0 left-0 w-full px-2.5 md:px-28 py-2.5 md:py-8 flex items-center justify-between z-50">
+      <div>
+        <a href="#" className="uppercase relative z-50">
+          {/* max milkin */}
+          <Text name="max milkin" fontSize="text-2xl font-semibold" />
+        </a>
+      </div>
+      <nav className="hidden md:block">
+        <ul className="flex gap-18">
+          {navlinks.map((value, index) => {
+            return (
+              <li key={index}>
+                <Text
+                  name={value}
+                  fontSize="text-xs md:text-[11.2px] font-medium"
+                />
+              </li>
+            );
+          })}
+        </ul>
+      </nav>
+      <nav
+        className={`flex items-center justify-center md:hidden absolute top-0 ${
+          hamBurger
+            ? "left-0 transition-all"
+            : "-left-full -translate-x-full transition-all"
+        } w-full h-screen`}
+      >
+        <ul className="flex flex-col gap-18 items-center">
+          {navlinks.map((value, index) => {
+            return (
+              <li key={index}>
+                <Text
+                  name={value}
+                  fontSize="text-xs md:text-[11.2px] font-medium"
+                />
+              </li>
+            );
+          })}
+        </ul>
+      </nav>
+      <button
+        className="block md:hidden absolute top-2.5 right-2.5 z-50 m-0 p-0"
+        onClick={handleNavbar}
+      >
+        <svg
+          class={`ham hamRotate ham1 ${hamBurger === true ? "active" : ""}`}
+          viewBox="0 0 100 100"
+          width="80"
+
+          // onclick="this.classList.toggle('active')"
+        >
+          <path
+            class="line top"
+            d="m 30,33 h 40 c 0,0 9.044436,-0.654587 9.044436,-8.508902 0,-7.854315 -8.024349,-11.958003 -14.89975,-10.85914 -6.875401,1.098863 -13.637059,4.171617 -13.637059,16.368042 v 40"
+          />
+          <path class="line middle" d="m 30,50 h 40" />
+          <path
+            class="line bottom"
+            d="m 30,67 h 40 c 12.796276,0 15.357889,-11.717785 15.357889,-26.851538 0,-15.133752 -4.786586,-27.274118 -16.667516,-27.274118 -11.88093,0 -18.499247,6.994427 -18.435284,17.125656 l 0.252538,40"
+          />
+        </svg>
+        {/* <Hamburger className={hamBurger === true ? ".active" : ""} /> */}
+      </button>
+    </header>
+  );
+}
+
+export default Navbar;

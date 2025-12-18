@@ -1,13 +1,20 @@
 import { useState } from "react";
 import "./App.css";
-import Index from "./components/HeroSection/Index";
+import Navbar from "./components/Header/Navbar";
+import HeroSection from "./components/HeroSection/HeroSection";
+import TestModel from "./components/ThreeD/TestModel";
+import CircularTimer from "./components/SectionTwo/CircularTimer";
+import PinnedSection from "./components/SectionTwo/PinnedSection";
 
 function App() {
   const [count, setCount] = useState(0);
 
   return (
     <>
-      <Index />
+      <Navbar />
+      <HeroSection />
+      <CircularTimer />
+      <PinnedSection />
     </>
   );
 }
