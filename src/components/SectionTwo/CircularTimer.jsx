@@ -21,8 +21,8 @@ export default function CircularTimer() {
   const activeTicks = seconds;
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-[#cfd7c6]">
-      <div className="relative w-55 h-55">
+    <div className="flex items-center justify-center bg-[#cfd7c6]">
+      <div className="relative w-20 h-20">
         <svg viewBox="0 0 220 220" className="w-full h-full">
           <g transform="translate(110,110)">
             {[...Array(TOTAL_TICKS)].map((_, i) => {
@@ -48,7 +48,7 @@ export default function CircularTimer() {
 
         {/* Center Time (HH:MM) */}
         <div className="absolute inset-0 flex items-center justify-center">
-          <span className="text-[18px] font-medium text-[#2f3e2f]">
+          <span className="text-[10px] font-medium text-[#2f3e2f]">
             {hours}:{minutes}
           </span>
         </div>

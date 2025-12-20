@@ -58,7 +58,8 @@ export default function TestModel() {
         <directionalLight
           position={[5, 5, 5]}
           intensity={2.8}
-          color="#71d088"
+          // color="#71d088"
+          color="#cfd7c6"
         />
 
         <Suspense fallback={null}>

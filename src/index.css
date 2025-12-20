@@ -47,3 +47,8 @@ body {
 .ham1.active .bottom {
   stroke-dashoffset: -138px;
 }
+
+.footer-max-milkin > p,
+.footer-max-milkin div {
+  line-height: 7rem !important;
+}

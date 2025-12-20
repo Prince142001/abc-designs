@@ -28,7 +28,10 @@ function Navbar() {
   return (
     <header className="fixed top-0 left-0 w-full px-2.5 md:px-28 py-2.5 md:py-8 flex items-center justify-between z-50">
       <div>
-        <a href="#" className="uppercase relative z-50 font-bebas-neue">
+        <a
+          href="#"
+          className="uppercase relative z-50 font-bebas-neue text-white"
+        >
           {/* max milkin */}
           <Text
             name="max milkin"
@@ -63,7 +66,7 @@ function Navbar() {
               <li key={index}>
                 <Text
                   name={value}
-                  fontSize="text-xs md:text-[11.2px] font-medium"
+                  fontSize="text-xs md:text-[11.2px]s text-white font-medium"
                 />
               </li>
             );

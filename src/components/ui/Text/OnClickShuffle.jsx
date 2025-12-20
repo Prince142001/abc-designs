@@ -1,34 +1,27 @@
 import React, { useRef, useEffect, useState, useMemo } from "react";
 import { gsap } from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { SplitText as GSAPSplitText } from "gsap/SplitText";
 import { useGSAP } from "@gsap/react";
 
-gsap.registerPlugin(ScrollTrigger, GSAPSplitText, useGSAP);
+gsap.registerPlugin(GSAPSplitText, useGSAP);
 
-const Shuffle = ({
+const OnClickShuffle = ({
   text,
   className = "",
   style = {},
   shuffleDirection = "right",
   duration = 0.35,
-  maxDelay = 0,
   ease = "power3.out",
-  threshold = 0.1,
-  rootMargin = "-100px",
-  tag = "p",
-  onShuffleComplete,
+  tag = "h2",
   shuffleTimes = 1,
   animationMode = "evenodd",
-  loop = false,
-  loopDelay = 0,
   stagger = 0.03,
   scrambleCharset = "",
   colorFrom,
   colorTo,
-  triggerOnce = true,
   respectReducedMotion = true,
-  triggerOnHover = true,
+  trigger = 0, // External trigger prop
+  onShuffleComplete,
 }) => {
   const ref = useRef(null);
   const [fontsLoaded, setFontsLoaded] = useState(false);
@@ -38,23 +31,12 @@ const Shuffle = ({
   const wrappersRef = useRef([]);
   const tlRef = useRef(null);
   const playingRef = useRef(false);
-  const hoverHandlerRef = useRef(null);
 
   const userHasFont = useMemo(
     () =>
       (style && style.fontFamily) || (className && /font[-[]/i.test(className)),
     [style, className]
   );
-
-  const scrollTriggerStart = useMemo(() => {
-    const startPct = (1 - threshold) * 100;
-    const mm = /^(-?\d+(?:\.\d+)?)(px|em|rem|%)?$/.exec(rootMargin || "");
-    const mv = mm ? parseFloat(mm[1]) : 0;
-    const mu = mm ? mm[2] || "px" : "px";
-    const sign =
-      mv === 0 ? "" : mv < 0 ? `-=${Math.abs(mv)}${mu}` : `+=${mv}${mu}`;
-    return `top ${startPct}%${sign}`;
-  }, [threshold, rootMargin]);
 
   useEffect(() => {
     if ("fonts" in document) {
@@ -65,7 +47,7 @@ const Shuffle = ({
 
   useGSAP(
     () => {
-      if (!ref.current || !text || !fontsLoaded) return;
+      if (!ref.current || !text || !fontsLoaded || trigger === 0) return;
 
       if (
         respectReducedMotion &&
@@ -83,20 +65,8 @@ const Shuffle = ({
         computedFont =
           style.fontFamily || getComputedStyle(el).fontFamily || "";
       } else {
-        computedFont = `'Press Start 2P', sans-serif`;
+        computedFont = getComputedStyle(el).fontFamily || "sans-serif";
       }
-
-      const start = scrollTriggerStart;
-
-      const removeHover = () => {
-        if (hoverHandlerRef.current && ref.current) {
-          ref.current.removeEventListener(
-            "mouseenter",
-            hoverHandlerRef.current
-          );
-          hoverHandlerRef.current = null;
-        }
-      };
 
       const teardown = () => {
         if (tlRef.current) {
@@ -174,6 +144,7 @@ const Shuffle = ({
           });
 
           inner.appendChild(firstOrig);
+
           for (let k = 0; k < rolls; k++) {
             const c = ch.cloneNode(true);
             if (scrambleCharset) c.textContent = rand(scrambleCharset);
@@ -184,11 +155,13 @@ const Shuffle = ({
             });
             inner.appendChild(c);
           }
+
           inner.appendChild(ch);
 
           const steps = rolls + 1;
           let startX = 0;
           let finalX = -steps * w;
+
           if (shuffleDirection === "right") {
             const firstCopy = inner.firstElementChild;
             const real = inner.lastElementChild;
@@ -243,23 +216,11 @@ const Shuffle = ({
 
         const tl = gsap.timeline({
           smoothChildTiming: true,
-          repeat: loop ? -1 : 0,
-          repeatDelay: loop ? loopDelay : 0,
-          onRepeat: () => {
-            if (scrambleCharset) randomizeScrambles();
-            gsap.set(strips, {
-              x: (i, t) => parseFloat(t.getAttribute("data-start-x") || "0"),
-            });
-            onShuffleComplete?.();
-          },
           onComplete: () => {
             playingRef.current = false;
-            if (!loop) {
-              cleanupToStill();
-              if (colorTo) gsap.set(strips, { color: colorTo });
-              onShuffleComplete?.();
-              armHover();
-            }
+            cleanupToStill();
+            if (colorTo) gsap.set(strips, { color: colorTo });
+            onShuffleComplete?.();
           },
         });
 
@@ -284,65 +245,24 @@ const Shuffle = ({
           const even = strips.filter((_, i) => i % 2 === 0);
           const oddTotal = duration + Math.max(0, odd.length - 1) * stagger;
           const evenStart = odd.length ? oddTotal * 0.7 : 0;
+
           if (odd.length) addTween(odd, 0);
           if (even.length) addTween(even, evenStart);
         } else {
-          strips.forEach((strip) => {
-            const d = Math.random() * maxDelay;
-            tl.to(
-              strip,
-              {
-                x: parseFloat(strip.getAttribute("data-final-x") || "0"),
-                duration,
-                ease,
-                force3D: true,
-              },
-              d
-            );
-            if (colorFrom && colorTo)
-              tl.fromTo(
-                strip,
-                { color: colorFrom },
-                { color: colorTo, duration, ease },
-                d
-              );
+          strips.forEach((strip, i) => {
+            addTween([strip], i * stagger);
           });
         }
 
         tlRef.current = tl;
       };
 
-      const armHover = () => {
-        if (!triggerOnHover || !ref.current) return;
-        removeHover();
-        const handler = () => {
-          if (playingRef.current) return;
-          build();
-          if (scrambleCharset) randomizeScrambles();
-          play();
-        };
-        hoverHandlerRef.current = handler;
-        ref.current.addEventListener("mouseenter", handler);
-      };
-
-      const create = () => {
-        build();
-        if (scrambleCharset) randomizeScrambles();
-        play();
-        armHover();
-        setReady(true);
-      };
-
-      const st = ScrollTrigger.create({
-        trigger: el,
-        start,
-        once: triggerOnce,
-        onEnter: create,
-      });
+      build();
+      if (scrambleCharset) randomizeScrambles();
+      play();
+      setReady(true);
 
       return () => {
-        st.kill();
-        removeHover();
         teardown();
         setReady(false);
       };
@@ -350,23 +270,18 @@ const Shuffle = ({
     {
       dependencies: [
         text,
+        trigger, // Re-run animation when trigger changes
         duration,
-        maxDelay,
         ease,
-        scrollTriggerStart,
         fontsLoaded,
         shuffleDirection,
         shuffleTimes,
         animationMode,
-        loop,
-        loopDelay,
         stagger,
         scrambleCharset,
         colorFrom,
         colorTo,
-        triggerOnce,
         respectReducedMotion,
-        triggerOnHover,
         onShuffleComplete,
         userHasFont,
       ],
@@ -375,12 +290,13 @@ const Shuffle = ({
   );
 
   const baseTw =
-    "inline-block whitespace-normal break-words will-change-transform leading-none";
+    "flex gap-2.5 flex-row justify-center items-center whitespace-normal break-words will-change-transform leading-none";
   const classes = useMemo(
     () => `${baseTw} ${ready ? "visible" : "invisible"} ${className}`.trim(),
     [baseTw, ready, className]
   );
-  const Tag = tag || "p";
+
+  const Tag = tag || "h2";
   const commonStyle = useMemo(() => ({ ...style }), [style]);
 
   return React.createElement(
@@ -390,4 +306,4 @@ const Shuffle = ({
   );
 };
 
-export default Shuffle;
+export default OnClickShuffle;

@@ -3,261 +3,595 @@ public
 - - - rock.glb
 src
 - components
-- - TestModel.jsx
 - - Header
 - - - Navbar.jsx
 - assets
 - - fonts
 - - - rf-dewi
 - - - - RFDewi-Light.ttf
+- - svgs
+- - - prince.svg
+- - - prince-signature.svg
 - - HeroSection
 - - - HeroSection.jsx
 - - ThreeD
 - - - Scene.jsx
 - - - styles.css
+- - - TestModel.jsx
+- - SectionTwo
+- - - CircularTimer.jsx
+- - - HeartbeatDot.jsx
+- - - PinnedSection.jsx
 - - ui
 - - - Text
 - - - Shuffle.jsx
+- - - OnScrollShuffle.jsx
 - - - - Text.jsx
+- - - - OnScrollText.jsx
 - App.jsx
 - App.css
 - index.css
 - main.jsx
+package.json
+tsconfig.json
+vite.config.js
 
-- - - Scene.jsx
-import { useState, useTransition } from "react";
-import { Canvas } from "@react-three/fiber";
-import {
-  AccumulativeShadows,
-  RandomizedLight,
-  Center,
-  Environment,
-  OrbitControls,
-} from "@react-three/drei";
+OnScrollShuffle.jsx
+import React, { useRef, useEffect, useState, useMemo } from "react";
 
-export default function App() {
-  return (
-    <Canvas shadows camera={{ position: [0, 0, 4.5], fov: 50 }}>
-      <group position={[0, -0.65, 0]}>
-        <Sphere />
-        <AccumulativeShadows
-          temporal
-          frames={200}
-          color="purple"
-          colorBlend={0.5}
-          opacity={1}
-          scale={10}
-          alphaTest={0.85}
-        >
-          <RandomizedLight
-            amount={8}
-            radius={5}
-            ambient={0.5}
-            position={[5, 3, 2]}
-            bias={0.001}
-          />
-        </AccumulativeShadows>
-      </group>
-      <Env />
-      <OrbitControls
-        autoRotate
-        autoRotateSpeed={4}
-        enablePan={false}
-        enableZoom={false}
-        minPolarAngle={Math.PI / 2.1}
-        maxPolarAngle={Math.PI / 2.1}
-      />
-    </Canvas>
+import { gsap } from "gsap";
+
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+import { SplitText as GSAPSplitText } from "gsap/SplitText";
+
+import { useGSAP } from "@gsap/react";
+
+gsap.registerPlugin(ScrollTrigger, GSAPSplitText, useGSAP);
+
+const OnScrollShuffle = ({
+  text,
+
+  className = "",
+
+  style = {},
+
+  shuffleDirection = "right",
+
+  duration = 0.35,
+
+  maxDelay = 0,
+
+  ease = "power3.out",
+
+  threshold = 0.1,
+
+  rootMargin = "-100px",
+
+  tag = "p",
+
+  onShuffleComplete,
+
+  shuffleTimes = 1,
+
+  animationMode = "evenodd",
+
+  loop = false,
+
+  loopDelay = 0,
+
+  stagger = 0.03,
+
+  scrambleCharset = "",
+
+  colorFrom,
+
+  colorTo,
+
+  triggerOnce = true,
+
+  respectReducedMotion = true,
+
+  // triggerOnHover = true,
+
+  triggerOnHover = false,
+}) => {
+  const ref = useRef(null);
+
+  const [fontsLoaded, setFontsLoaded] = useState(false);
+
+  const [ready, setReady] = useState(false);
+
+  const splitRef = useRef(null);
+
+  const wrappersRef = useRef([]);
+
+  const tlRef = useRef(null);
+
+  const playingRef = useRef(false);
+
+  const hoverHandlerRef = useRef(null);
+
+  const userHasFont = useMemo(
+    () =>
+      (style && style.fontFamily) || (className && /font[-[]/i.test(className)),
+
+    [style, className]
   );
-}
 
-function Sphere() {
-  const roughness = 1;
+  const scrollTriggerStart = useMemo(() => {
+    const startPct = (1 - threshold) * 100;
 
-  return (
-    <Center top>
-      <mesh castShadow>
-        <sphereGeometry args={[0.75, 64, 64]} />
-        <meshStandardMaterial metalness={1} roughness={roughness} />
-      </mesh>
-    </Center>
-  );
-}
+    const mm = /^(-?\d+(?:\.\d+)?)(px|em|rem|%)?$/.exec(rootMargin || "");
 
-function Env() {
-  const [preset, setPreset] = useState("sunset");
-  // You can use the "inTransition" boolean to react to the loading in-between state,
-  // For instance by showing a message
-  const [inTransition, startTransition] = useTransition();
-  const blur = 0.65;
+    const mv = mm ? parseFloat(mm[1]) : 0;
 
-  return <Environment preset={preset} background blur={blur} />;
-}
+    const mu = mm ? mm[2] || "px" : "px";
 
-style.css
-@import url("https://rsms.me/inter/inter.css");
+    const sign =
+      mv === 0 ? "" : mv < 0 ? `-=${Math.abs(mv)}${mu}` : `+=${mv}${mu}`;
+    return `top ${startPct}%${sign}`;
+  }, [threshold, rootMargin]);
 
-/* ============================
-   3D HERO SECTION ONLY
-============================ */
+  useEffect(() => {
+    if ("fonts" in document) {
+      if (document.fonts.status === "loaded") setFontsLoaded(true);
+      else document.fonts.ready.then(() => setFontsLoaded(true));
+    } else setFontsLoaded(true);
+  }, []);
 
-#root > div {
-  width: 100%;
-  height: 100vh !important; /* ✅ Full viewport height */
-}
+  useGSAP(
+    () => {
+      if (!ref.current || !text || !fontsLoaded) return;
 
-.hero-3d {
-  width: 100%;
-  height: 100vh; /* ✅ Full viewport height */
-  position: relative;
-  overflow: hidden;
-  background: #f5f5f5;
-  font-family: "Inter var", sans-serif;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  color: black;
-}
+      if (
+        respectReducedMotion &&
+        window.matchMedia &&
+        window.matchMedia("(prefers-reduced-motion: reduce)").matches
+      ) {
+        onShuffleComplete?.();
 
-/* Only elements INSIDE hero-3d */
-.hero-3d *,
-.hero-3d *::before,
-.hero-3d *::after {
-  box-sizing: border-box;
-}
+        return;
+      }
 
-/* Canvas must fill the hero */
-.hero-3d canvas {
-  width: 100% !important;
-  height: 100% !important;
-  display: block;
-}
+      const el = ref.current;
 
-/* Links inside hero only */
-.hero-3d a {
-  pointer-events: all;
-  color: black;
-  text-decoration: none;
-}
+      let computedFont = "";
 
-/* SVGs inside hero only */
-.hero-3d svg {
-  fill: black;
-}
+      if (userHasFont) {
+        computedFont =
+          style.fontFamily || getComputedStyle(el).fontFamily || "";
+      } else {
+        computedFont = `'Press Start 2P', sans-serif`;
+      }
 
+      const start = scrollTriggerStart;
 
-Navbar.jsx
-import React, { useState } from "react";
-import Text from "../ui/Text/Text";
-// import Hamburger from "../icons/Hamburger";
-// import Shuffle from "../ui/Text/Shuffle";
+      const removeHover = () => {
+        if (hoverHandlerRef.current && ref.current) {
+          ref.current.removeEventListener(
+            "mouseenter",
 
-function Navbar() {
-  const [hamBurger, setHamburger] = useState(true);
+            hoverHandlerRef.current
+          );
 
-  const handleNavbar = () => {
-    setHamburger((prev) => !prev);
-  };
+          hoverHandlerRef.current = null;
+        }
+      };
 
-  const navlinks = ["about", "awards", "works", "expertise", "contact"];
-  return (
-    <header className="fixed top-0 left-0 w-full px-2.5 md:px-28 py-2.5 md:py-8 flex items-center justify-between z-50">
-      <div>
-        <a href="#" className="uppercase relative z-50">
-          {/* max milkin */}
-          <Text name="max milkin" fontSize="text-2xl font-semibold" />
-        </a>
-      </div>
-      <nav className="hidden md:block">
-        <ul className="flex gap-18">
-          {navlinks.map((value, index) => {
-            return (
-              <li key={index}>
-                <Text
-                  name={value}
-                  fontSize="text-xs md:text-[11.2px] font-medium"
-                />
-              </li>
+      const teardown = () => {
+        if (tlRef.current) {
+          tlRef.current.kill();
+
+          tlRef.current = null;
+        }
+
+        if (wrappersRef.current.length) {
+          wrappersRef.current.forEach((wrap) => {
+            const inner = wrap.firstElementChild;
+
+            const orig = inner?.querySelector('[data-orig="1"]');
+
+            if (orig && wrap.parentNode)
+              wrap.parentNode.replaceChild(orig, wrap);
+          });
+
+          wrappersRef.current = [];
+        }
+
+        try {
+          splitRef.current?.revert();
+        } catch {
+          /* noop */
+        }
+
+        splitRef.current = null;
+
+        playingRef.current = false;
+      };
+
+      const build = () => {
+        teardown();
+
+        splitRef.current = new GSAPSplitText(el, {
+          type: "chars",
+
+          charsClass: "shuffle-char",
+
+          wordsClass: "shuffle-word",
+
+          linesClass: "shuffle-line",
+
+          smartWrap: true,
+
+          reduceWhiteSpace: false,
+        });
+
+        const chars = splitRef.current.chars || [];
+
+        wrappersRef.current = [];
+
+        const rolls = Math.max(1, Math.floor(shuffleTimes));
+
+        const rand = (set) =>
+          set.charAt(Math.floor(Math.random() * set.length)) || "";
+
+        chars.forEach((ch) => {
+          const parent = ch.parentElement;
+
+          if (!parent) return;
+
+          const w = ch.getBoundingClientRect().width;
+
+          if (!w) return;
+
+          const wrap = document.createElement("span");
+
+          wrap.className =
+            "inline-block overflow-hidden align-baseline text-left";
+
+          Object.assign(wrap.style, { width: w + "px" });
+
+          const inner = document.createElement("span");
+
+          inner.className =
+            "inline-block whitespace-nowrap will-change-transform origin-left transform-gpu";
+
+          parent.insertBefore(wrap, ch);
+
+          wrap.appendChild(inner);
+
+          const firstOrig = ch.cloneNode(true);
+
+          firstOrig.className = "inline-block text-left";
+
+          Object.assign(firstOrig.style, {
+            width: w + "px",
+
+            fontFamily: computedFont,
+          });
+
+          ch.setAttribute("data-orig", "1");
+
+          ch.className = "inline-block text-left";
+
+          Object.assign(ch.style, {
+            width: w + "px",
+
+            fontFamily: computedFont,
+          });
+
+          inner.appendChild(firstOrig);
+
+          for (let k = 0; k < rolls; k++) {
+            const c = ch.cloneNode(true);
+
+            if (scrambleCharset) c.textContent = rand(scrambleCharset);
+
+            c.className = "inline-block text-left";
+
+            Object.assign(c.style, {
+              width: w + "px",
+
+              fontFamily: computedFont,
+            });
+
+            inner.appendChild(c);
+          }
+
+          inner.appendChild(ch);
+
+          const steps = rolls + 1;
+
+          let startX = 0;
+
+          let finalX = -steps * w;
+
+          if (shuffleDirection === "right") {
+            const firstCopy = inner.firstElementChild;
+
+            const real = inner.lastElementChild;
+
+            if (real) inner.insertBefore(real, inner.firstChild);
+
+            if (firstCopy) inner.appendChild(firstCopy);
+
+            startX = -steps * w;
+
+            finalX = 0;
+          }
+
+          gsap.set(inner, { x: startX, force3D: true });
+
+          if (colorFrom) inner.style.color = colorFrom;
+
+          inner.setAttribute("data-final-x", String(finalX));
+
+          inner.setAttribute("data-start-x", String(startX));
+
+          wrappersRef.current.push(wrap);
+        });
+      };
+
+      const inners = () => wrappersRef.current.map((w) => w.firstElementChild);
+
+      const randomizeScrambles = () => {
+        if (!scrambleCharset) return;
+
+        wrappersRef.current.forEach((w) => {
+          const strip = w.firstElementChild;
+
+          if (!strip) return;
+
+          const kids = Array.from(strip.children);
+
+          for (let i = 1; i < kids.length - 1; i++) {
+            kids[i].textContent = scrambleCharset.charAt(
+              Math.floor(Math.random() * scrambleCharset.length)
             );
-          })}
-        </ul>
-      </nav>
-      <nav
-        className={`flex items-center justify-center md:hidden absolute top-0 ${
-          hamBurger
-            ? "left-0 transition-all"
-            : "-left-full -translate-x-full transition-all"
-        } w-full h-screen`}
-      >
-        <ul className="flex flex-col gap-18 items-center">
-          {navlinks.map((value, index) => {
-            return (
-              <li key={index}>
-                <Text
-                  name={value}
-                  fontSize="text-xs md:text-[11.2px] font-medium"
-                />
-              </li>
+          }
+        });
+      };
+
+      const cleanupToStill = () => {
+        wrappersRef.current.forEach((w) => {
+          const strip = w.firstElementChild;
+
+          if (!strip) return;
+
+          const real = strip.querySelector('[data-orig="1"]');
+
+          if (!real) return;
+
+          strip.replaceChildren(real);
+
+          strip.style.transform = "none";
+
+          strip.style.willChange = "auto";
+        });
+      };
+
+      const play = () => {
+        const strips = inners();
+
+        if (!strips.length) return;
+
+        playingRef.current = true;
+
+        const tl = gsap.timeline({
+          smoothChildTiming: true,
+
+          repeat: loop ? -1 : 0,
+
+          repeatDelay: loop ? loopDelay : 0,
+
+          onRepeat: () => {
+            if (scrambleCharset) randomizeScrambles();
+
+            gsap.set(strips, {
+              x: (i, t) => parseFloat(t.getAttribute("data-start-x") || "0"),
+            });
+
+            onShuffleComplete?.();
+          },
+
+          onComplete: () => {
+            playingRef.current = false;
+
+            if (!loop) {
+              cleanupToStill();
+
+              if (colorTo) gsap.set(strips, { color: colorTo });
+
+              onShuffleComplete?.();
+
+              // armHover();
+            }
+          },
+        });
+
+        const addTween = (targets, at) => {
+          tl.to(
+            targets,
+
+            {
+              x: (i, t) => parseFloat(t.getAttribute("data-final-x") || "0"),
+
+              duration,
+
+              ease,
+
+              force3D: true,
+
+              stagger: animationMode === "evenodd" ? stagger : 0,
+            },
+
+            at
+          );
+
+          if (colorFrom && colorTo)
+            tl.to(targets, { color: colorTo, duration, ease }, at);
+        };
+
+        if (animationMode === "evenodd") {
+          const odd = strips.filter((_, i) => i % 2 === 1);
+
+          const even = strips.filter((_, i) => i % 2 === 0);
+
+          const oddTotal = duration + Math.max(0, odd.length - 1) * stagger;
+
+          const evenStart = odd.length ? oddTotal * 0.7 : 0;
+
+          if (odd.length) addTween(odd, 0);
+
+          if (even.length) addTween(even, evenStart);
+        } else {
+          strips.forEach((strip) => {
+            const d = Math.random() * maxDelay;
+
+            tl.to(
+              strip,
+
+              {
+                x: parseFloat(strip.getAttribute("data-final-x") || "0"),
+
+                duration,
+
+                ease,
+
+                force3D: true,
+              },
+
+              d
             );
-          })}
-        </ul>
-      </nav>
-      <button
-        className="block md:hidden absolute top-2.5 right-2.5 z-50 m-0 p-0"
-        onClick={handleNavbar}
-      >
-        <svg
-          class={`ham hamRotate ham1 ${hamBurger === true ? "active" : ""}`}
-          viewBox="0 0 100 100"
-          width="80"
 
-          // onclick="this.classList.toggle('active')"
-        >
-          <path
-            class="line top"
-            d="m 30,33 h 40 c 0,0 9.044436,-0.654587 9.044436,-8.508902 0,-7.854315 -8.024349,-11.958003 -14.89975,-10.85914 -6.875401,1.098863 -13.637059,4.171617 -13.637059,16.368042 v 40"
-          />
-          <path class="line middle" d="m 30,50 h 40" />
-          <path
-            class="line bottom"
-            d="m 30,67 h 40 c 12.796276,0 15.357889,-11.717785 15.357889,-26.851538 0,-15.133752 -4.786586,-27.274118 -16.667516,-27.274118 -11.88093,0 -18.499247,6.994427 -18.435284,17.125656 l 0.252538,40"
-          />
-        </svg>
-        {/* <Hamburger className={hamBurger === true ? ".active" : ""} /> */}
-      </button>
-    </header>
+            if (colorFrom && colorTo)
+              tl.fromTo(
+                strip,
+
+                { color: colorFrom },
+
+                { color: colorTo, duration, ease },
+
+                d
+              );
+          });
+        }
+
+        tlRef.current = tl;
+      };
+
+      // const armHover = () => {
+
+      //   if (!triggerOnHover || !ref.current) return;
+
+      //   removeHover();
+
+      //   const handler = () => {
+
+      //     if (playingRef.current) return;
+
+      //     build();
+
+      //     if (scrambleCharset) randomizeScrambles();
+
+      //     play();
+
+      //   };
+
+      //   hoverHandlerRef.current = handler;
+
+      //   ref.current.addEventListener("mouseenter", handler);
+
+      // };
+
+      const create = () => {
+        build();
+
+        if (scrambleCharset) randomizeScrambles();
+
+        play();
+
+        // armHover();
+
+        setReady(true);
+      };
+
+      const st = ScrollTrigger.create({
+        trigger: el,
+
+        start,
+
+        once: triggerOnce,
+
+        onEnter: create,
+      });
+
+      return () => {
+        st.kill();
+
+        // removeHover();
+
+        teardown();
+
+        setReady(false);
+      };
+    },
+
+    {
+      dependencies: [
+        text,
+        duration,
+        maxDelay,
+        ease,
+        scrollTriggerStart,
+        fontsLoaded,
+        shuffleDirection,
+        shuffleTimes,
+        animationMode,
+        loop,
+        loopDelay,
+        stagger,
+        scrambleCharset,
+        colorFrom,
+        colorTo,
+        triggerOnce,
+        respectReducedMotion,
+        // triggerOnHover,
+        onShuffleComplete,
+        userHasFont,
+      ],
+      scope: ref,
+    }
   );
-}
 
-export default Navbar;
-
-HeroSection.jsx
-// import Scene from "../ThreeD/Scene";
-import "../ThreeD/styles.css";
-import Text from "../ui/Text/Text";
-
-function HeroSection() {
-  return (
-    <div>
-      {/* <Scene /> */}
-      <div className="absolute top-1/2 left-1/2 -translate-1/2 w-fit z-50">
-        <h1 className="text-sm text-cyan-900">
-          <Text value="Minimalism is not emptiness," fontSize="hi" />
-          <Text value="its" fontSize="hi" />
-          <Text value="essence." fontSize="hi" />
-        </h1>
-      </div>
-    </div>
+  const baseTw =
+    "inline-block whitespace-normal break-words will-change-transform leading-none";
+  const classes = useMemo(
+    () => `${baseTw} ${ready ? "visible" : "invisible"} ${className}`.trim(),
+    [baseTw, ready, className]
   );
-}
 
-export default HeroSection;
+  const Tag = tag || "p";
 
-Text.jsx
-import Shuffle from "./Shuffle";
+  const commonStyle = useMemo(() => ({ ...style }), [style]);
 
-function Text({ name, fontSize }) {
+  return React.createElement(
+    Tag,
+    { ref: ref, className: classes, style: commonStyle },
+    text
+  );
+};
+
+export default OnScrollShuffle;
+
+
+OnScrollText.jsx
+import OnScrollShuffle from "./OnScrollShuffle";
+
+function OnScrollText({ name, fontSize }) {
   return (
-    <Shuffle
+    <OnScrollShuffle
       text={name}
       className={`uppercase ${fontSize} tracking-wide`}
       shuffleDirection="right"
@@ -272,90 +606,102 @@ function Text({ name, fontSize }) {
   );
 }
 
-export default Text;
+export default OnScrollText;
 
+PinnedSection.jsx
+import { useLayoutEffect, useRef } from "react";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import OnScrollText from "../ui/Text/OnScrollText";
+import HeartbeatDot from "./HeartbeatDot";
+import CircularTimer from "./CircularTimer";
 
-Navbar
-import React, { useState } from "react";
-import Text from "../ui/Text/Text";
-// import Hamburger from "../icons/Hamburger";
-// import Shuffle from "../ui/Text/Shuffle";
+gsap.registerPlugin(ScrollTrigger);
 
-function Navbar() {
-  const [hamBurger, setHamburger] = useState(true);
+export default function PinnedSection() {
+  const sectionRef = useRef(null);
+  const timelineRef = useRef(null);
 
-  const handleNavbar = () => {
-    setHamburger((prev) => !prev);
-  };
+  useLayoutEffect(() => {
+    timelineRef.current = gsap.timeline({
+      scrollTrigger: {
+        trigger: sectionRef.current,
+        start: "top top",
+        end: "+=200%", // adjust if needed
+        pin: true,
+        scrub: 1,
+        anticipatePin: 1,
+      },
+    });
 
-  const navlinks = ["about", "awards", "works", "expertise", "contact"];
+    return () => {
+      timelineRef.current?.scrollTrigger?.kill();
+      timelineRef.current?.kill();
+    };
+  }, []);
+
   return (
-    <header className="fixed top-0 left-0 w-full px-2.5 md:px-28 py-2.5 md:py-8 flex items-center justify-between z-50">
-      <div>
-        <a href="#" className="uppercase relative z-50">
-          {/* max milkin */}
-          <Text name="max milkin" fontSize="text-2xl font-semibold" />
-        </a>
-      </div>
-      <nav className="hidden md:block">
-        <ul className="flex gap-18">
-          {navlinks.map((value, index) => {
-            return (
-              <li key={index}>
-                <Text
-                  name={value}
-                  fontSize="text-xs md:text-[11.2px] font-medium"
-                />
-              </li>
-            );
-          })}
-        </ul>
-      </nav>
-      <nav
-        className={`flex items-center justify-center md:hidden absolute top-0 ${
-          hamBurger
-            ? "left-0 transition-all"
-            : "-left-full -translate-x-full transition-all"
-        } w-full h-screen`}
-      >
-        <ul className="flex flex-col gap-18 items-center">
-          {navlinks.map((value, index) => {
-            return (
-              <li key={index}>
-                <Text
-                  name={value}
-                  fontSize="text-xs md:text-[11.2px] font-medium"
-                />
-              </li>
-            );
-          })}
-        </ul>
-      </nav>
-      <button
-        className="block md:hidden absolute top-2.5 right-2.5 z-50 m-0 p-0"
-        onClick={handleNavbar}
-      >
-        <svg
-          class={`ham hamRotate ham1 ${hamBurger === true ? "active" : ""}`}
-          viewBox="0 0 100 100"
-          width="80"
-
-          // onclick="this.classList.toggle('active')"
-        >
-          <path
-            class="line top"
-            d="m 30,33 h 40 c 0,0 9.044436,-0.654587 9.044436,-8.508902 0,-7.854315 -8.024349,-11.958003 -14.89975,-10.85914 -6.875401,1.098863 -13.637059,4.171617 -13.637059,16.368042 v 40"
-          />
-          <path class="line middle" d="m 30,50 h 40" />
-          <path
-            class="line bottom"
-            d="m 30,67 h 40 c 12.796276,0 15.357889,-11.717785 15.357889,-26.851538 0,-15.133752 -4.786586,-27.274118 -16.667516,-27.274118 -11.88093,0 -18.499247,6.994427 -18.435284,17.125656 l 0.252538,40"
-          />
-        </svg>
-        {/* <Hamburger className={hamBurger === true ? ".active" : ""} /> */}
-      </button>
-    </header>
+    <section
+      ref={sectionRef}
+      className="section-2 section-2-layer h-screen w-full bg-[#cfd7c6] flex items-center justify-center text-black text-3xl px-28 py-18"
+    >
+      {" "}
+      {/* px-2.5 md:px-28 */}{" "}
+      <div className="w-full h-full flex flex-col justify-between">
+        {" "}
+        <ul className="flex items-center justify-between text-[12.2px] font-medium">
+          {" "}
+          <li>[&nbsp;N.001&nbsp;]</li> <li>+</li>{" "}
+          <li className="border border-black px-3 py-1 rounded-full overflow-hidden flex items-center justify-center gap-1.5">
+            {" "}
+            dev <HeartbeatDot />{" "}
+          </li>{" "}
+        </ul>{" "}
+        <ul className="flex items-center justify-between text-[12.2px] font-medium">
+          {" "}
+          <li>
+            {" "}
+            <CircularTimer />{" "}
+          </li>{" "}
+          <li>+</li>{" "}
+          <li>
+            {" "}
+            <p className="uppercase">edition_2.0</p>{" "}
+          </li>{" "}
+        </ul>{" "}
+      </div>{" "}
+      <div className="absolute top-1/2 left-1/2 -translate-1/2 w-[286.34px] z-50">
+        {" "}
+        <h1 className="text-sm text-black flex flex-col items-end">
+          {" "}
+          <OnScrollText
+            name="in code and in life,"
+            fontSize="text-[14.4px] w-full text-left"
+          />{" "}
+          <OnScrollText
+            name="i strive &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; to keep only"
+            fontSize="text-[14.4px] w-full text-left"
+          />{" "}
+          <OnScrollText
+            name="what matters and remove the rest."
+            fontSize="text-[14.4px] w-full text-left"
+          />{" "}
+          <OnScrollText
+            name="what says is stronger, clearer,"
+            fontSize="text-[14.4px] w-full text-left"
+          />{" "}
+          <OnScrollText
+            name="and more"
+            fontSize="text-[14.4px] w-full text-right"
+          />{" "}
+          <OnScrollText
+            name="meaningful."
+            fontSize="text-[14.4px] w-full text-right"
+          />{" "}
+        </h1>{" "}
+      </div>{" "}
+    </section>
   );
 }
 
-export default Navbar;
+see now what my requirement is as you know my section is pinned so what i want is that if you see there is OnScrollShuffle on that there is some animation so what i want the animation is slow and till it animate when pinned sectino is not complete did you understant what i say please try to understant

@@ -5,6 +5,7 @@ import HeroSection from "./components/HeroSection/HeroSection";
 import TestModel from "./components/ThreeD/TestModel";
 import CircularTimer from "./components/SectionTwo/CircularTimer";
 import PinnedSection from "./components/SectionTwo/PinnedSection";
+import ContactForm from "./components/Contact/ContactForm";
 
 function App() {
   const [count, setCount] = useState(0);
@@ -13,8 +14,8 @@ function App() {
     <>
       <Navbar />
       <HeroSection />
-      <CircularTimer />
       <PinnedSection />
+      <ContactForm />
     </>
   );
 }

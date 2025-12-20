@@ -4,7 +4,7 @@ function Text({ name, fontSize }) {
   return (
     <Shuffle
       text={name}
-      className={`uppercase ${fontSize} tracking-wide text-white`}
+      className={`uppercase ${fontSize} tracking-wide`}
       shuffleDirection="right"
       duration={0.35}
       shuffleTimes={1}
