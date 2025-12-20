@@ -1,6 +1,7 @@
 import React from "react";
 import CounterOnScroll from "../ui/CounterOnScroll";
 import OnScrollText from "../ui/Text/OnScrollText";
+import Table from "./Table";
 
 function Awards() {
   return (
@@ -39,6 +40,7 @@ function Awards() {
           </p>
         </div>
       </div>
+      <Table />
       <div className="absolute z-10 right-8 top-20">
         <CounterOnScroll
           targetValue={18}
