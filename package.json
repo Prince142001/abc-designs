@@ -25,6 +25,7 @@
     "gsap": "^3.14.2",
     "leva": "^0.10.1",
     "lucide-react": "^0.562.0",
+    "motion": "^12.23.26",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
     "tailwind-merge": "^3.4.0",

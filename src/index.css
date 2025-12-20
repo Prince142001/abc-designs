@@ -52,3 +52,7 @@ body {
 .footer-max-milkin div {
   line-height: 7rem !important;
 }
+.awards-text span,
+.awards-text div {
+  letter-spacing: 2px !important;
+}

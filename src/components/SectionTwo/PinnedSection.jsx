@@ -25,6 +25,21 @@ export default function PinnedSection() {
       },
     });
 
+    // Animate background color from dark to light
+    timelineRef.current.fromTo(
+      sectionRef.current,
+      {
+        backgroundColor: "#434948", // Dark - initial color
+      },
+      {
+        backgroundColor: "#000fff", // Light - final color
+        // backgroundColor: "#c2cabb", // Light - final color
+        duration: 1, // Takes full scroll duration to transition
+        ease: "none", // Linear transition
+      },
+      0 // Start at beginning of timeline
+    );
+
     return () => {
       timelineRef.current?.scrollTrigger?.kill();
       timelineRef.current?.kill();
@@ -34,7 +49,8 @@ export default function PinnedSection() {
   return (
     <section
       ref={sectionRef}
-      className="section-2 section-2-layer relative h-screen w-full bg-[#cfd7c6] flex items-center justify-center text-black text-3xl px-28 py-18"
+      className="section-2 section-2-layer relative h-screen w-full flex items-center justify-center text-black text-3xl px-28 py-18"
+      style={{ backgroundColor: "#434948" }} // Initial color
     >
       <div className="w-full h-full flex flex-col justify-between">
         <ul className="flex items-center justify-between text-[12.2px] font-medium">
@@ -90,12 +106,11 @@ export default function PinnedSection() {
         </h1>
       </div>
 
-      {/* Signature animates AFTER text - Pass sectionRef as trigger */}
       <div className="absolute right-[35%] bottom-[37%] -rotate-12">
         <Signature
           triggerRef={sectionRef}
-          startPosition="top top+=90%" // Start after text animations (80%+)
-          endPosition="+=110%" // Continue until end of pin
+          startPosition="top top+=90%"
+          endPosition="+=110%"
         />
       </div>
     </section>

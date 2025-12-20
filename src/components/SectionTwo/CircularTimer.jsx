@@ -21,7 +21,7 @@ export default function CircularTimer() {
   const activeTicks = seconds;
 
   return (
-    <div className="flex items-center justify-center bg-[#cfd7c6]">
+    <div className="flex items-center justify-center bg-transparent">
       <div className="relative w-20 h-20">
         <svg viewBox="0 0 220 220" className="w-full h-full">
           <g transform="translate(110,110)">
