@@ -7,6 +7,7 @@ import CircularTimer from "./components/SectionTwo/CircularTimer";
 import PinnedSection from "./components/SectionTwo/PinnedSection";
 import ContactForm from "./components/Contact/ContactForm";
 import Awards from "./components/Awards/Awards";
+import About from "./components/About/About";
 
 function App() {
   const [count, setCount] = useState(0);
@@ -16,6 +17,7 @@ function App() {
       <Navbar />
       <HeroSection />
       <PinnedSection />
+      <About />
       <Awards />
       <ContactForm />
     </>

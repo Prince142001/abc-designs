@@ -70,7 +70,7 @@ export default function Signature({
         width="166.37833"
         height="42.379333"
         viewBox="0 0 166.37833 42.379333"
-        className="w-full max-w-41.5 h-auto"
+        className="w-3/4 md:w-full max-w-41.5 h-auto"
       >
         <path
           ref={(el) => (pathsRef.current[0] = el)}

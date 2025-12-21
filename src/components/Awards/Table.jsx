@@ -42,7 +42,7 @@ function Table() {
 
   return (
     <div className="flex items-end justify-end relative z-30 mt-16">
-      <div className="w-[77.5%] relative" ref={tableRef}>
+      <div className="w-full md:w-[77.5%] relative" ref={tableRef}>
         {/* Floating background div with effects */}
         <div
           className="absolute left-0 right-0 bg-[#d2d8cb] pointer-events-none transition-all duration-300 ease-out will-change-transform"
@@ -63,8 +63,8 @@ function Table() {
                 onMouseLeave={handleMouseLeave}
                 className="border-b border-black text-[15.2px] font-medium uppercase cursor-default"
               >
-                <td className="pt-2 w-[60px]">{row.time}</td>
-                <td className="pt-2 w-[200px]">{row.award}</td>
+                <td className="pt-2 w-15">{row.time}</td>
+                <td className="pt-2 w-50">{row.award}</td>
                 <td className="pt-2">{row.title}</td>
               </tr>
             ))}

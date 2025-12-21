@@ -24,7 +24,6 @@ function Footer() {
 
   return (
     <footer className="py-10">
-      {/* Top links */}
       <ul className="flex flex-row gap-18 justify-center items-center -tracking-wide">
         {links.map((value) => (
           <li key={value}>
@@ -33,7 +32,6 @@ function Footer() {
         ))}
       </ul>
 
-      {/* Center title */}
       <h2 className="mt-8 mb-0 flex items-center justify-center footer-max-milkin">
         <OnScrollText
           name="max milkin"
@@ -41,7 +39,6 @@ function Footer() {
         />
       </h2>
 
-      {/* Social media links */}
       <ul className="mt-0 flex items-center justify-center gap-14">
         {socialMedia.map((item) => (
           <li key={item.name}>

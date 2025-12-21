@@ -25,19 +25,18 @@ export default function PinnedSection() {
       },
     });
 
-    // Animate background color from dark to light
     timelineRef.current.fromTo(
       sectionRef.current,
       {
-        backgroundColor: "#434948", // Dark - initial color
+        backgroundColor: "#434948",
       },
       {
-        backgroundColor: "#000fff", // Light - final color
-        // backgroundColor: "#c2cabb", // Light - final color
-        duration: 1, // Takes full scroll duration to transition
-        ease: "none", // Linear transition
+        backgroundColor: "#c2cabb",
+        // backgroundColor: "#c2cabb",
+        duration: 1,
+        ease: "none",
       },
-      0 // Start at beginning of timeline
+      0
     );
 
     return () => {
@@ -49,8 +48,8 @@ export default function PinnedSection() {
   return (
     <section
       ref={sectionRef}
-      className="section-2 section-2-layer relative h-screen w-full flex items-center justify-center text-black text-3xl px-28 py-18"
-      style={{ backgroundColor: "#434948" }} // Initial color
+      className="relative h-screen w-full flex items-center justify-center text-black text-3xl px-6 md:px-28 py-14 md:py-18"
+      style={{ backgroundColor: "#434948" }}
     >
       <div className="w-full h-full flex flex-col justify-between">
         <ul className="flex items-center justify-between text-[12.2px] font-medium">
@@ -71,7 +70,7 @@ export default function PinnedSection() {
         </ul>
       </div>
 
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[286.34px] z-50">
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[90%] md:w-[286.34px] z-50">
         <h1 className="text-sm text-black flex flex-col items-end">
           <OnScrollText
             name="in code and in life,"
@@ -106,7 +105,7 @@ export default function PinnedSection() {
         </h1>
       </div>
 
-      <div className="absolute right-[35%] bottom-[37%] -rotate-12">
+      <div className="absolute -right-4 md:right-[35%] bottom-[37%] -rotate-12">
         <Signature
           triggerRef={sectionRef}
           startPosition="top top+=90%"

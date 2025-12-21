@@ -12,11 +12,20 @@ function HeroSection() {
       </div>
 
       {/* Text Overlay Layer */}
-      <div className="absolute top-1/2 left-1/2 -translate-1/2 w-fit z-50 pointer-events-none">
+      <div className="absolute top-1/2 left-1/2 -translate-1/2 w-[14.2rem] md:w-fit z-50 pointer-events-none">
         <h1 className="text-sm text-white flex flex-col items-end">
-          <Text name="Minimalism is not emptiness," fontSize="text-[14.4px]" />
-          <Text name="its" fontSize="text-[14.4px]" />
-          <Text name="essence." fontSize="text-[14.4px] -mr-[42px]" />
+          <Text
+            name="Minimalism is not emptiness,"
+            fontSize=" w-full sm:w-fit text-[14.4px]"
+          />
+          <Text
+            name="its"
+            fontSize="text-[14.4px] w-full sm:w-fit text-right"
+          />
+          <Text
+            name="essence."
+            fontSize="text-[14.4px] mr-0 md:-mr-[42px] text-right w-full sm:w-fit"
+          />
         </h1>
       </div>
     </div>

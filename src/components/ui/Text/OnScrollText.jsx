@@ -9,7 +9,7 @@ function OnScrollText({
   return (
     <OnScrollShuffle
       text={name}
-      className={`uppercase ${fontSize}`}
+      className={`uppercase w-full sm:w-fit ${fontSize}`}
       shuffleDirection="right"
       duration={duration}
       shuffleTimes={2}

@@ -2,6 +2,7 @@ import React, { useRef, useState } from "react";
 import FooterBg from "../../assets/footer-bg.png";
 import OnClickShuffle from "../ui/Text/OnClickShuffle";
 import Footer from "../Footer/Footer";
+import HoverText from "../ui/Text/HoverText";
 
 function ContactForm() {
   const sectionRef = useRef(null);
@@ -22,7 +23,7 @@ function ContactForm() {
 
   const handleRadioClick = (value) => {
     setSelectedPrice(value);
-    setAnimationTrigger((prev) => prev + 1); // Trigger shuffle animation
+    setAnimationTrigger((prev) => prev + 1);
   };
 
   const circleSize = 200;
@@ -98,7 +99,6 @@ function ContactForm() {
               ( contact form. )
             </p>
 
-            {/* Shuffle animation on click */}
             <OnClickShuffle
               text="lets make your project special"
               className="text-3xl font-semibold uppercase tracking-wide text-center mt-6"
@@ -190,11 +190,13 @@ function ContactForm() {
                 </button>
               </div>
               <div className="flex items-center justify-center mt-14">
-                <input
-                  type="submit"
-                  value="confirm"
-                  className="py-3 mx-auto my-0 text-center w-[168.25px] text-[11.2px] uppercase border border-black rounded-full bg-transparent cursor-pointer hover:bg-black hover:text-white transition"
-                />
+                <button type="submit" className="mx-auto my-0">
+                  <HoverText
+                    defaultText="confirm"
+                    hoverText="submit"
+                    fontSize="text-[13.2px] py-3 block  bg-transparent cursor-pointer hover:bg-[#ffffff26] transition text-center w-[168.25px] uppercase border border-black rounded-full"
+                  />
+                </button>
               </div>
             </form>
           </div>
