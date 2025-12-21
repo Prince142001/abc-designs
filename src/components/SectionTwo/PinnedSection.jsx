@@ -10,6 +10,8 @@ gsap.registerPlugin(ScrollTrigger);
 
 export default function PinnedSection() {
   const sectionRef = useRef(null);
+  const contentRef1 = useRef(null);
+  const contentRef2 = useRef(null);
   const timelineRef = useRef(null);
 
   useLayoutEffect(() => {
@@ -32,7 +34,19 @@ export default function PinnedSection() {
       },
       {
         backgroundColor: "#c2cabb",
-        // backgroundColor: "#c2cabb",
+        duration: 1,
+        ease: "none",
+      },
+      0
+    );
+
+    timelineRef.current.fromTo(
+      [contentRef1.current, contentRef2.current],
+      {
+        opacity: 0,
+      },
+      {
+        opacity: 1,
         duration: 1,
         ease: "none",
       },
@@ -51,26 +65,44 @@ export default function PinnedSection() {
       className="relative h-screen w-full flex items-center justify-center text-black text-3xl px-6 md:px-28 py-14 md:py-18"
       style={{ backgroundColor: "#434948" }}
     >
-      <div className="w-full h-full flex flex-col justify-between">
-        <ul className="flex items-center justify-between text-[12.2px] font-medium">
-          <li>[&nbsp;N.001&nbsp;]</li>
-          <li>+</li>
+      <div
+        ref={contentRef1}
+        className="w-full h-full flex flex-col justify-between"
+        style={{ opacity: 0 }}
+      >
+        <ul className="flex items-center justify-between">
+          <li>
+            <p className="text-[12.2px] font-medium text-black">
+              [&nbsp;N.001&nbsp;]
+            </p>
+          </li>
+          <li>
+            <p className="text-[12.2px] font-medium text-black">+</p>
+          </li>
           <li className="text-[12.2px] font-medium border border-black px-3 py-0.5 rounded-full overflow-hidden flex items-center justify-center gap-1.5">
             dev <HeartbeatDot />
           </li>
         </ul>
-        <ul className="flex items-center justify-between text-[12.2px] font-medium">
+        <ul className="flex items-center justify-between">
           <li>
             <CircularTimer />
           </li>
-          <li>+</li>
           <li>
-            <p className="uppercase">edition_2.0</p>
+            <p className="text-[12.2px] font-medium text-black">+</p>
+          </li>
+          <li>
+            <p className="text-[12.2px] font-medium text-black uppercase">
+              edition_2.0
+            </p>
           </li>
         </ul>
       </div>
 
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[90%] md:w-[286.34px] z-50">
+      <div
+        ref={contentRef2}
+        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[90%] md:w-[286.34px] z-50"
+        style={{ opacity: 0 }}
+      >
         <h1 className="text-sm text-black flex flex-col items-end">
           <OnScrollText
             name="in code and in life,"

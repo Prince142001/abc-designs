@@ -50,7 +50,7 @@ function Footer() {
             >
               <AnimatedUnderline
                 text={item.name}
-                className="text-[13.2px] font-medium text-white"
+                className="text-[13.2px] font-medium text-black"
               />
             </a>
           </li>

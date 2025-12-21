@@ -8,6 +8,7 @@ import PinnedSection from "./components/SectionTwo/PinnedSection";
 import ContactForm from "./components/Contact/ContactForm";
 import Awards from "./components/Awards/Awards";
 import About from "./components/About/About";
+import Works from "./components/Works/Works";
 
 function App() {
   const [count, setCount] = useState(0);
@@ -19,6 +20,7 @@ function App() {
       <PinnedSection />
       <About />
       <Awards />
+      <Works />
       <ContactForm />
     </>
   );

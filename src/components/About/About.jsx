@@ -1,23 +1,37 @@
-import React, { useRef, useLayoutEffect } from "react";
+import React, { useRef, useLayoutEffect, forwardRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import ScatteredText from "./ScatteredText";
 import ScalingImage from "./ScalingImage";
-import MaxImg from "../../assets/max.jpg"; // Ensure this path is correct
+import StaggeredSlideUpGroup from "./StaggeredSlideUpGroup";
+import MaxImg from "../../assets/max.jpg";
 import Text from "../ui/Text/Text";
 
 gsap.registerPlugin(ScrollTrigger);
+
+const SlidingText = forwardRef(({ text, className }, ref) => (
+  <div className="w-full overflow-hidden">
+    <p
+      ref={ref}
+      className={className}
+      style={{ transform: "translateY(-192px)" }}
+    >
+      {text}
+    </p>
+  </div>
+));
+
+SlidingText.displayName = "SlidingText";
 
 function About() {
   const sectionRef = useRef(null);
 
   useLayoutEffect(() => {
     const ctx = gsap.context(() => {
-      // Pinning Logic
       ScrollTrigger.create({
         trigger: sectionRef.current,
-        start: "top top", // Pin when top of section hits top of viewport
-        end: "+=200%", // Duration of pin
+        start: "top top",
+        end: "+=200%",
         pin: true,
         anticipatePin: 1,
         // markers: true,
@@ -27,13 +41,16 @@ function About() {
     return () => ctx.revert();
   }, []);
 
+  const textClassName =
+    "block w-full text-[180px] leading-36 font-bold uppercase -tracking-wider";
+
   return (
     <section
       ref={sectionRef}
-      className="about-section relative w-full h-screen bg-[#10120f] text-3xl px-6 md:px-28 py-20 md:pt-20 md:pb-28"
+      className="about-section relative w-full h-screen bg-[#10120f] text-3xl px-6 md:px-28 py-20 md:pt-20 md:pb-40"
     >
-      <div className="absolute left-1/2 top-[55%] -translate-x-1/2 -translate-y-1/2 w-fit">
-        <div className="flex items-center justify-center">
+      <div className="absolute left-1/2 top-[45%] -translate-x-1/2 -translate-y-1/2 w-fit">
+        <div className="flex items-center justify-center relative z-1000">
           <ScalingImage
             src={MaxImg}
             alt="Max Avatar"
@@ -102,7 +119,24 @@ function About() {
         </div>
       </div>
 
-      <div className="h-[93vh] pt-20 md:pt-20">
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[90%] z-20">
+        {/* USAGE OF THE COMPONENT */}
+        <StaggeredSlideUpGroup className="w-full">
+          <SlidingText text="fundam" className={`${textClassName} text-left`} />
+          <SlidingText text="entals" className={`${textClassName} text-left`} />
+          <SlidingText
+            text="of Web"
+            className={`${textClassName} text-right`}
+          />
+          <SlidingText
+            text="Develop"
+            className={`${textClassName} text-right`}
+          />
+          <SlidingText text="ment" className={`${textClassName} text-right`} />
+        </StaggeredSlideUpGroup>
+      </div>
+
+      <div className="h-screen">
         <div className="w-full h-full flex flex-col justify-between">
           <ul className="flex items-center justify-between text-[12.2px] text-[#3b4039] font-medium -mt-20">
             <li className="relative text-[13.2px] font-medium uppercase">

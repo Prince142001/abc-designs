@@ -5,7 +5,7 @@ function Hamburger() {
     <svg
       class="ham hamRotate ham1"
       viewBox="0 0 100 100"
-      width="80"
+      width="40"
       onclick="this.classList.toggle('active')"
     >
       <path

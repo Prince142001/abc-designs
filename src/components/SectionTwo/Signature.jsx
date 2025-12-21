@@ -17,13 +17,12 @@ export default function Signature({
     const paths = pathsRef.current.filter(Boolean);
     if (!paths.length || !svgRef.current) return;
 
-    // Set initial stroke dash and opacity
     paths.forEach((path) => {
       const length = path.getTotalLength();
       gsap.set(path, {
         strokeDasharray: length,
         strokeDashoffset: length,
-        opacity: 0, // Start invisible
+        opacity: 0,
       });
     });
 
@@ -35,7 +34,7 @@ export default function Signature({
       start: startPosition,
       end: endPosition,
       scrub: scrubSpeed,
-      markers: false, // Set true for debugging
+      markers: false,
       id: "signature-animation",
     });
 
@@ -43,7 +42,8 @@ export default function Signature({
     sign
       .to(paths, {
         opacity: 1,
-        duration: 0.1,
+        duration: 5,
+        delay: 3,
       })
       .to(
         paths,

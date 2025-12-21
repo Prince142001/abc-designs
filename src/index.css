@@ -14,6 +14,7 @@ body {
 }
 
 .ham {
+  width: 40px !important;
   cursor: pointer;
   -webkit-tap-highlight-color: transparent;
   transition: transform 400ms;
@@ -28,6 +29,7 @@ body {
 .hamRotate180.active {
   transform: rotate(180deg);
 }
+
 .line {
   fill: none;
   transition: stroke-dasharray 400ms, stroke-dashoffset 400ms;
@@ -35,6 +37,15 @@ body {
   stroke-width: 5.5;
   stroke-linecap: round;
 }
+
+.line {
+  fill: none;
+  transition: stroke-dasharray 400ms, stroke-dashoffset 400ms;
+  stroke: #fff; /* ✅ Changed from #000 to #fff (white) */
+  stroke-width: 5.5;
+  stroke-linecap: round;
+}
+
 .ham1 .top {
   stroke-dasharray: 40 139;
 }
@@ -63,4 +74,9 @@ body {
   .awards-text div {
     letter-spacing: 2px !important;
   }
+}
+
+.about-section {
+  padding: 140px 112px !important;
+  height: 63rem !important;
 }
