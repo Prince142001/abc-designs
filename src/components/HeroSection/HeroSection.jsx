@@ -1,17 +1,16 @@
 import TestModel from "../ThreeD/TestModel";
-// import "../ThreeD/styles.css"; // Ensure this doesn't conflict
 import Text from "../ui/Text/Text";
 
 function HeroSection() {
   return (
-    // Added 'h-screen' so the 3D model takes up the full first view
-    <div className="relative w-full h-screen overflow-hidden bg-[#191919]">
-      {/* 3D Model Layer */}
+    <div
+      id="hero-section"
+      className="relative w-full h-screen overflow-hidden bg-[#191919]"
+    >
       <div className="absolute inset-0 z-0">
         <TestModel />
       </div>
 
-      {/* Text Overlay Layer */}
       <div className="absolute top-1/2 left-1/2 -translate-1/2 w-[14.2rem] md:w-fit z-50 pointer-events-none">
         <h1 className="text-sm text-white flex flex-col items-end">
           <Text

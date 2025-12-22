@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import Text from "../ui/Text/Text";
+import { Link } from "react-router-dom";
+import { HashLink } from "react-router-hash-link"; // Import HashLink
 
 function Navbar() {
   const [hamBurger, setHamburger] = useState(false);
@@ -9,6 +11,7 @@ function Navbar() {
   };
 
   const navlinks = ["about", "awards", "works", "expertise", "contact"];
+
   const socialMedia = [
     {
       name: "LinkedIn",
@@ -24,33 +27,46 @@ function Navbar() {
     },
   ];
 
+  // Logic: 'about' goes to a new page, others scroll to sections on Home
+  const getLinkTarget = (linkName) => {
+    if (linkName === "about") return "/about";
+    return `/#${linkName}`;
+  };
+
   return (
     <header className="fixed top-0 left-0 w-full px-2.5 md:px-28 py-2.5 md:py-8 flex items-center justify-between z-50">
+      {/* --- LOGO --- */}
       <div>
-        <a
-          href="#"
+        <Link
+          to="/"
           className="uppercase relative z-50 font-bebas-neue text-white"
         >
           <Text
             name="max milkin"
             fontSize="text-2xl font-semibold font-bebas-neue"
           />
-        </a>
+        </Link>
       </div>
+
+      {/* --- DESKTOP NAV --- */}
       <nav className="hidden md:block">
         <ul className="flex gap-18">
           {navlinks.map((value, index) => {
             return (
               <li key={index}>
-                <Text
-                  name={value}
-                  fontSize="text-xs md:text-[11.2px] font-medium"
-                />
+                <HashLink smooth to={getLinkTarget(value)}>
+                  <Text
+                    name={value}
+                    fontSize="text-xs md:text-[11.2px] text-white font-medium"
+                  />
+                </HashLink>
               </li>
             );
           })}
         </ul>
       </nav>
+
+      {/* --- MOBILE NAV OVERLAY --- */}
       <nav
         className={`flex items-center justify-center md:hidden fixed inset-0 w-full h-screen bg-[#c2cabb72] z-100 transition-opacity duration-500 ${
           hamBurger
@@ -72,14 +88,23 @@ function Navbar() {
                   transitionDelay: hamBurger ? `${index * 100}ms` : "0ms",
                 }}
               >
-                <Text
-                  name={value}
-                  fontSize="text-xl md:text-[11.2px] text-black font-medium"
-                />
+                {/* Close menu when clicking a link */}
+                <HashLink
+                  smooth
+                  to={getLinkTarget(value)}
+                  onClick={() => setHamburger(false)}
+                >
+                  <Text
+                    name={value}
+                    fontSize="text-xl md:text-[11.2px] text-black font-medium"
+                  />
+                </HashLink>
               </li>
             );
           })}
         </ul>
+
+        {/* --- MOBILE SOCIAL MEDIA --- */}
         <div className="absolute bottom-10 left-1/2 -translate-x-1/2">
           <ul className="flex gap-8">
             {socialMedia.map((item, index) => (
@@ -109,6 +134,8 @@ function Navbar() {
           </ul>
         </div>
       </nav>
+
+      {/* --- HAMBURGER BUTTON --- */}
       <button
         className="block md:hidden absolute top-2.5 right-2.5 m-0 p-0 z-200"
         onClick={handleNavbar}

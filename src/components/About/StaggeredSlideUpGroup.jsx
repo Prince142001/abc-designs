@@ -1,63 +1,71 @@
-import React, { useRef, useLayoutEffect } from "react";
+import { useRef, useLayoutEffect, Children, cloneElement } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 gsap.registerPlugin(ScrollTrigger);
 
-const StaggeredSlideUpGroup = ({ children, className }) => {
-  const containerRef = useRef(null);
+export default function StaggeredSlideUpGroup({
+  children,
+  className = "",
+  triggerRef = null,
+  startTrigger = "top 80%",
+  endTrigger = "top 30%",
+  initialY = -192,
+  duration = 2.5,
+  stagger = 0.25,
+  ease = "none",
+  scrub = 1,
+}) {
+  const groupRef = useRef(null);
+  const textsRef = useRef([]);
 
   useLayoutEffect(() => {
-    const ctx = gsap.context(() => {
-      // We target the <p> tags inside this specific container
-      const targets = containerRef.current.querySelectorAll("p");
+    if (!textsRef.current.length) return;
 
-      gsap.fromTo(
-        targets,
-        {
-          y: -150, // Starting position (hidden "up")
-          opacity: 0, // Optional: fading in looks smoother with the slide
+    const trigger = triggerRef?.current || groupRef.current;
+
+    gsap.fromTo(
+      textsRef.current,
+      { y: initialY },
+      {
+        y: 0,
+        duration: duration,
+        ease: ease,
+        stagger: stagger,
+        scrollTrigger: {
+          trigger: trigger,
+          start: startTrigger,
+          end: endTrigger,
+          scrub: scrub,
+          toggleActions: "play none none reverse",
         },
-        {
-          y: 0,
-          opacity: 1,
+      }
+    );
 
-          // 🟢 1. ANIMATION SPEED (How long the text takes to settle)
-          // Increase this number to make it SLOWER.
-          // 0.5 is fast, 2.0 is very slow.
-          duration: 1.5,
-
-          // 🟢 2. DELAY BETWEEN ITEMS (The Stagger Effect)
-          // How much time to wait before the next line starts.
-          // 0.1 is tight, 0.5 is a long gap.
-          stagger: 0.2,
-
-          ease: "power3.out", // Smooth easing (starts fast, ends slow)
-
-          scrollTrigger: {
-            trigger: containerRef.current,
-            start: "top 80%", // Animation starts when top of text hits 80% of viewport height
-            end: "bottom 20%",
-
-            // 🟢 3. SCROLL DIRECTION LOGIC
-            // "play"    = When scrolling down and entering view -> Animate In
-            // "none"    = When scrolling past -> Do nothing
-            // "none"    = When scrolling back up into view -> Do nothing
-            // "reverse" = When scrolling back up past the start -> Animate Out (Hide)
-            toggleActions: "play none none reverse",
-          },
-        }
-      );
-    }, containerRef);
-
-    return () => ctx.revert();
-  }, []);
+    return () => {
+      ScrollTrigger.getAll().forEach((t) => t.kill());
+    };
+  }, [
+    triggerRef,
+    startTrigger,
+    endTrigger,
+    initialY,
+    duration,
+    stagger,
+    ease,
+    scrub,
+  ]);
 
   return (
-    <div ref={containerRef} className={className}>
-      {children}
+    <div ref={groupRef} className={className}>
+      {Children.map(children, (child, index) => {
+        if (!child) return null;
+        return cloneElement(child, {
+          ref: (el) => {
+            if (el) textsRef.current[index] = el;
+          },
+        });
+      })}
     </div>
   );
-};
-
-export default StaggeredSlideUpGroup;
+}

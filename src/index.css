@@ -13,6 +13,27 @@ body {
   font-family: "RFDewi", system-ui, sans-serif;
 }
 
+html {
+  scroll-behavior: smooth;
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
 .ham {
   width: 40px !important;
   cursor: pointer;
@@ -79,4 +100,14 @@ body {
 .about-section {
   padding: 140px 112px !important;
   height: 63rem !important;
+}
+
+a {
+  cursor: pointer !important;
+}
+
+input,
+textarea,
+select {
+  cursor: text !important;
 }

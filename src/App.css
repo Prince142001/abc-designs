@@ -5,6 +5,15 @@
 
 @theme {
   --font-bebas-neue: "Bebas Neue", sans-serif;
+  --bg-dark: #0b0c0a;
+}
+
+@theme {
+  --background-dark: #0b0c0a;
+}
+
+@theme inline {
+  --color-dark: var(--background-dark);
 }
 
 /* ---------------- HEARTBEAT DOT ---------------- */

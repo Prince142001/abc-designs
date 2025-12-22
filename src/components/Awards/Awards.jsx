@@ -6,7 +6,10 @@ import AwardsBg from "../../assets/awards-bg.png";
 
 function Awards() {
   return (
-    <section className="min-h-screen relative bg-[#c2cabb] px-6 md:px-28 pt-14 pb-32 md:pt-18 md:pb-80">
+    <section
+      id="awards"
+      className="min-h-screen relative bg-[#c2cabb] px-6 md:px-28 pt-14 pb-32 md:pt-18 md:pb-80"
+    >
       <div className="w-full hidden md:block">
         <p className="text-[14.2px] font-medium text-black text-right">
           [&nbsp;N.003&nbsp;]

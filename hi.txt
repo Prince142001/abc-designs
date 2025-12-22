@@ -37,7 +37,7 @@ tsconfig.json
 vite.config.js
 
 
-
+https://magicui.design/docs/components/smooth-cursor
 https://magicui.design/docs/components/spinning-text
 
 

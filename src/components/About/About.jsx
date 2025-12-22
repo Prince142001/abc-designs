@@ -34,7 +34,6 @@ function About() {
         end: "+=200%",
         pin: true,
         anticipatePin: 1,
-        // markers: true,
       });
     }, sectionRef);
 
@@ -49,8 +48,33 @@ function About() {
       ref={sectionRef}
       className="about-section relative w-full h-screen bg-[#10120f] text-3xl px-6 md:px-28 py-20 md:pt-20 md:pb-40"
     >
-      <div className="absolute left-1/2 top-[45%] -translate-x-1/2 -translate-y-1/2 w-fit">
-        <div className="flex items-center justify-center relative z-1000">
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[90%] z-10">
+        <StaggeredSlideUpGroup
+          triggerRef={sectionRef}
+          startTrigger="top 80%"
+          endTrigger="top 20%"
+          initialY={-192}
+          duration={2.5}
+          stagger={0.25}
+          ease="none"
+          scrub={1}
+        >
+          <SlidingText text="fundam" className={`${textClassName} text-left`} />
+          <SlidingText text="entals" className={`${textClassName} text-left`} />
+          <SlidingText
+            text="of Web"
+            className={`${textClassName} text-right`}
+          />
+          <SlidingText
+            text="Develop"
+            className={`${textClassName} text-right`}
+          />
+          <SlidingText text="ment" className={`${textClassName} text-right`} />
+        </StaggeredSlideUpGroup>
+      </div>
+
+      <div className="absolute left-1/2 top-[45%] -translate-x-1/2 -translate-y-1/2 w-fit z-50">
+        <div className="flex items-center justify-center">
           <ScalingImage
             src={MaxImg}
             alt="Max Avatar"
@@ -117,23 +141,6 @@ function About() {
             />
           </a>
         </div>
-      </div>
-
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[90%] z-20">
-        {/* USAGE OF THE COMPONENT */}
-        <StaggeredSlideUpGroup className="w-full">
-          <SlidingText text="fundam" className={`${textClassName} text-left`} />
-          <SlidingText text="entals" className={`${textClassName} text-left`} />
-          <SlidingText
-            text="of Web"
-            className={`${textClassName} text-right`}
-          />
-          <SlidingText
-            text="Develop"
-            className={`${textClassName} text-right`}
-          />
-          <SlidingText text="ment" className={`${textClassName} text-right`} />
-        </StaggeredSlideUpGroup>
       </div>
 
       <div className="h-screen">

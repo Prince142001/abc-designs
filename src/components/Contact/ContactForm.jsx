@@ -36,7 +36,7 @@ function ContactForm() {
       onMouseLeave={() => setIsHovering(false)}
       className="relative min-h-screen overflow-hidden bg-[#c2cabb]"
     >
-      <section>
+      <section id="contact">
         <div
           className="absolute inset-0 bg-no-repeat bg-center bg-cover"
           style={{

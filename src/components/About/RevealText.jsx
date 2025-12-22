@@ -4,18 +4,18 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 gsap.registerPlugin(ScrollTrigger);
 
-export default function SlideUpText({
+export default function RevealText({
   text,
   className = "",
   wrapperClassName = "w-full overflow-hidden",
-  initialY = -192, // -translate-y-48 = -192px (48 * 4)
+  initialY = -192,
   duration = 1,
-  ease = "power3.out",
+  ease = "none",
   triggerRef = null,
   startTrigger = "top 80%",
-  endTrigger = "top 50%",
-  scrub = false,
-  staggerGroup = null, // Group identifier for stagger
+  endTrigger = "top 30%",
+  scrub = 1,
+  staggerGroup = null,
 }) {
   const textRef = useRef(null);
 
@@ -24,13 +24,11 @@ export default function SlideUpText({
 
     const trigger = triggerRef?.current || textRef.current;
 
-    // If part of stagger group, let parent handle animation
     if (staggerGroup) {
       textRef.current.setAttribute("data-stagger-group", staggerGroup);
       return;
     }
 
-    // Individual animation
     gsap.fromTo(
       textRef.current,
       { y: initialY },
@@ -43,7 +41,7 @@ export default function SlideUpText({
           start: startTrigger,
           end: endTrigger,
           scrub: scrub,
-          // markers: true,
+          toggleActions: "play none none reverse",
         },
       }
     );
