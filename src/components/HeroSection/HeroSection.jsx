@@ -11,7 +11,7 @@ function HeroSection() {
         <TestModel />
       </div>
 
-      <div className="absolute top-1/2 left-1/2 -translate-1/2 w-[14.2rem] md:w-fit z-50 pointer-events-none">
+      <div className="absolute top-1/2 left-1/2 -translate-1/2 w-[14.2rem] md:w-fit pointer-events-none z-0">
         <h1 className="text-sm text-white flex flex-col items-end">
           <Text
             name="Minimalism is not emptiness,"

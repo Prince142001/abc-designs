@@ -97,9 +97,37 @@ html {
   }
 }
 
+.pinned-section {
+  padding: 50px 18px 25px !important;
+}
+
+@media (min-width: 768px) {
+  .pinned-section {
+    padding: 72px 25px 25px !important;
+  }
+}
+
+header div a p {
+  line-height: 20px !important;
+}
+
 .about-section {
-  padding: 140px 112px !important;
-  height: 63rem !important;
+  padding: 0px 18px !important;
+  /* height: 63rem !important; */
+}
+
+@media (min-width: 768px) {
+  .about-section {
+    padding: 72px 25px !important;
+    /* height: 63rem !important; */
+  }
+}
+
+@media (min-width: 768px) {
+  .about-section {
+    padding: 140px 112px !important;
+    /* height: 63rem !important; */
+  }
 }
 
 a {

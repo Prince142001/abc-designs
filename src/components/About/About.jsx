@@ -27,12 +27,20 @@ function About() {
   const sectionRef = useRef(null);
 
   useLayoutEffect(() => {
+    const getPinDuration = () => {
+      const width = window.innerWidth;
+      if (width < 768) return "+=100vh";
+      if (width < 1280) return "+=120vh";
+      return "+=150vh";
+    };
+
     const ctx = gsap.context(() => {
       ScrollTrigger.create({
         trigger: sectionRef.current,
         start: "top top",
-        end: "+=200%",
+        end: getPinDuration(),
         pin: true,
+        pinSpacing: true,
         anticipatePin: 1,
       });
     }, sectionRef);
@@ -41,18 +49,18 @@ function About() {
   }, []);
 
   const textClassName =
-    "block w-full text-[180px] leading-36 font-bold uppercase -tracking-wider";
+    "block w-full text-8xl leading-20 md:text-[130px] md:leading-32 lg:text-[180px] lg:leading-36 font-bold uppercase -tracking-wider";
 
   return (
     <section
       ref={sectionRef}
-      className="about-section relative w-full h-screen bg-[#10120f] text-3xl px-6 md:px-28 py-20 md:pt-20 md:pb-40"
+      className="about-section relative w-full min-h-screen bg-[#10120f] text-3xl px-4.5 md:px-6.25 lg:px-28 py-20 md:pt-20 md:pb-40"
     >
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[90%] z-10">
+      <div className="absolute top-[30%] md:top-2/5 lg:top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[90%] z-10">
         <StaggeredSlideUpGroup
           triggerRef={sectionRef}
           startTrigger="top 80%"
-          endTrigger="top 20%"
+          endTrigger="top 30%"
           initialY={-192}
           duration={2.5}
           stagger={0.25}
@@ -73,24 +81,24 @@ function About() {
         </StaggeredSlideUpGroup>
       </div>
 
-      <div className="absolute left-1/2 top-[45%] -translate-x-1/2 -translate-y-1/2 w-fit z-50">
+      <div className="absolute left-1/2 top-1/2 md:top-3/5 lg:top-[45%] -translate-x-1/2 -translate-y-1/2 w-full lg:w-fit z-50">
         <div className="flex items-center justify-center">
           <ScalingImage
             src={MaxImg}
             alt="Max Avatar"
-            className="w-60 h-full"
+            className="w-48 md:w-60 h-full"
             imgClassName="w-full h-full object-contain"
             initialScale={0.5}
             finalScale={1}
             triggerRef={sectionRef}
             startTrigger="top bottom"
-            endTrigger="top top"
+            endTrigger="top center"
             scrubSpeed={1}
             ease="power1.out"
           />
         </div>
 
-        <div className="mt-16">
+        <div className="mt-16 md:mt-60 lg:mt-16">
           <ScatteredText
             lines={[
               "HI",
@@ -133,7 +141,7 @@ function About() {
           />
         </div>
 
-        <div className="flex items-center justify-center mt-24">
+        <div className="flex items-center justify-center mt-12 md:mt-24 lg:mt-24">
           <a href="#" className="">
             <Text
               name="about me"
@@ -143,22 +151,22 @@ function About() {
         </div>
       </div>
 
-      <div className="h-screen">
-        <div className="w-full h-full flex flex-col justify-between">
-          <ul className="flex items-center justify-between text-[12.2px] text-[#3b4039] font-medium -mt-20">
+      <div className="h-auto md:h-screen">
+        <div className="w-full h-auto flex flex-col justify-between">
+          <ul className="flex items-center justify-between mt-0 lg:-mt-20">
             <li className="relative text-[13.2px] font-medium uppercase">
-              <div className="absolute left-0 top-10 w-15">
-                <span className="">( about. )</span>
+              <div className="relative lg:absolute left-0 top-2.5 lg:top-10 w-15">
+                <span className="text-white lg:text-black">( about. )</span>
               </div>
             </li>
             <li className="relative text-right">
               <span className="text-[13.2px] font-medium">
                 [&nbsp;N.002&nbsp;]
               </span>
-              <div className="absolute right-0 -bottom-24 w-1 h-14 bg-[#3b4039]"></div>
+              <div className="hidden lg:block absolute right-0 -bottom-24 w-1 h-14 bg-[#3b4039]"></div>
             </li>
           </ul>
-          <ul className="flex items-center justify-between text-[12.2px] font-medium">
+          <ul className="hidden lg:flex items-center justify-between text-[12.2px] font-medium">
             <li className="h-1 w-14 bg-[#3b4039]"></li>
             <li>
               <span className="text-[13.2px] text-[#3b4039] font-medium">

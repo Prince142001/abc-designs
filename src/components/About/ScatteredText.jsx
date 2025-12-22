@@ -6,7 +6,7 @@ gsap.registerPlugin(ScrollTrigger);
 
 export default function ScatteredText({
   lines = [],
-  className = "text-[15.2px] font-medium flex gap-1 items-center justify-center",
+  className = "text-[10.2px] md:text-[15.2px] font-medium flex gap-1 items-center justify-center",
   scatterMode = "random", // 'random' or 'spiral' or 'explosion'
 }) {
   const containerRef = useRef(null);

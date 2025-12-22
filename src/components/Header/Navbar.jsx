@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import Text from "../ui/Text/Text";
 import { Link } from "react-router-dom";
-import { HashLink } from "react-router-hash-link"; // Import HashLink
+import { HashLink } from "react-router-hash-link";
+import AnimatedUnderline from "../ui/AnimatedUnderline";
 
 function Navbar() {
   const [hamBurger, setHamburger] = useState(false);
@@ -27,15 +28,13 @@ function Navbar() {
     },
   ];
 
-  // Logic: 'about' goes to a new page, others scroll to sections on Home
   const getLinkTarget = (linkName) => {
     if (linkName === "about") return "/about";
     return `/#${linkName}`;
   };
 
   return (
-    <header className="fixed top-0 left-0 w-full px-2.5 md:px-28 py-2.5 md:py-8 flex items-center justify-between z-50">
-      {/* --- LOGO --- */}
+    <header className="fixed top-0 left-0 w-full px-4.5 md:px-6.25 xl:px-28 py-2.5 md:py-8 flex items-center justify-between z-50">
       <div>
         <Link
           to="/"
@@ -43,12 +42,11 @@ function Navbar() {
         >
           <Text
             name="max milkin"
-            fontSize="text-2xl font-semibold font-bebas-neue"
+            fontSize="text-2xl leading-5 font-semibold font-bebas-neue"
           />
         </Link>
       </div>
 
-      {/* --- DESKTOP NAV --- */}
       <nav className="hidden md:block">
         <ul className="flex gap-18">
           {navlinks.map((value, index) => {
@@ -66,15 +64,15 @@ function Navbar() {
         </ul>
       </nav>
 
-      {/* --- MOBILE NAV OVERLAY --- */}
       <nav
-        className={`flex items-center justify-center md:hidden fixed inset-0 w-full h-screen bg-[#c2cabb72] z-100 transition-opacity duration-500 ${
+        className={`flex items-center justify-center md:hidden fixed inset-0 w-full h-screen bg-[#c2cabb72] backdrop-blur-sm transition-opacity duration-500 ${
           hamBurger
             ? "opacity-100 pointer-events-auto"
             : "opacity-0 pointer-events-none"
         }`}
+        style={{ zIndex: 100 }}
       >
-        <ul className="flex flex-col gap-18 items-center">
+        <ul className="flex flex-col gap-8 items-center">
           {navlinks.map((value, index) => {
             return (
               <li
@@ -88,7 +86,6 @@ function Navbar() {
                   transitionDelay: hamBurger ? `${index * 100}ms` : "0ms",
                 }}
               >
-                {/* Close menu when clicking a link */}
                 <HashLink
                   smooth
                   to={getLinkTarget(value)}
@@ -96,7 +93,7 @@ function Navbar() {
                 >
                   <Text
                     name={value}
-                    fontSize="text-xl md:text-[11.2px] text-black font-medium"
+                    fontSize="text-xl md:text-[11.2px] text-white font-medium"
                   />
                 </HashLink>
               </li>
@@ -104,9 +101,8 @@ function Navbar() {
           })}
         </ul>
 
-        {/* --- MOBILE SOCIAL MEDIA --- */}
-        <div className="absolute bottom-10 left-1/2 -translate-x-1/2">
-          <ul className="flex gap-8">
+        <div className="absolute w-[90%] bottom-6 left-1/2 -translate-x-1/2">
+          <ul className="flex justify-center items-center gap-8">
             {socialMedia.map((item, index) => (
               <li
                 key={index}
@@ -127,17 +123,31 @@ function Navbar() {
                   rel="noopener noreferrer"
                   className="text-black text-sm font-medium hover:underline"
                 >
-                  {item.name}
+                  <AnimatedUnderline
+                    text={item.name}
+                    underlineColor="bg-[#c2cabb]"
+                    underlineHeight="h-px"
+                    className="text-[13.2px] font-medium text-[#c2cabb]"
+                  />
                 </a>
               </li>
             ))}
           </ul>
+
+          <div className="flex items-center justify-center mt-10">
+            <a
+              href="mailto:prince.pv.14.2000@gmail.com?subject=Saying%20hello%20from%20you"
+              className="text-[15.2px] text-[#c2cabb] font-semibold uppercase cursor-pointer"
+            >
+              email: prince.pv.14.2000@gmail.com
+            </a>
+          </div>
         </div>
       </nav>
 
-      {/* --- HAMBURGER BUTTON --- */}
       <button
-        className="block md:hidden absolute top-2.5 right-2.5 m-0 p-0 z-200"
+        className="block md:hidden absolute top-2.5 right-2.5 m-0 p-0"
+        style={{ zIndex: 200 }}
         onClick={handleNavbar}
       >
         <svg

@@ -23,7 +23,7 @@ function Footer() {
   ];
 
   return (
-    <footer className="py-0 lg:py-10">
+    <footer className="py-0 lg:pt-10 lg:pb-0">
       <ul className="flex flex-row  justify-between md:justify-center gap-0 md:gap-18 items-center -tracking-wide">
         {links.map((value) => (
           <li key={value}>
@@ -61,7 +61,7 @@ function Footer() {
         <a
           href="mailto:prince.pv.14.2000@gmail.com
          ?subject=Saying%20hello%20from%you"
-          className="text-2xl font-bebas-neue font-semibold cursor-pointer hover:text-black/70"
+          className="text-xl font-bebas-neue font-semibold cursor-pointer hover:text-black/70"
         >
           email: prince.pv.14.2000@gmail.com
         </a>
@@ -70,6 +70,7 @@ function Footer() {
       <h2 className="flex items-center justify-center gap-3 mt-8">
         <OnScrollText
           name="creative frontend developer"
+          markers={true}
           fontSize="text-3xl md:text-4xl lg:text-7xl font-semibold text-center uppercase text-black/70"
         />
       </h2>
