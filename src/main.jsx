@@ -51,16 +51,16 @@ const MainApp = () => {
 
   return (
     <>
-      {/* {!loadingComplete && (
+      {!loadingComplete && (
         <CircularLoader onComplete={() => setLoadingComplete(true)} />
       )}
 
-      {loadingComplete && ( */}
-      <SmoothScroll>
-        <SmoothCursor />
-        <RouterProvider router={router} />
-      </SmoothScroll>
-      {/* )} */}
+      {loadingComplete && (
+        <SmoothScroll>
+          <SmoothCursor />
+          <RouterProvider router={router} />
+        </SmoothScroll>
+      )}
     </>
   );
 };
