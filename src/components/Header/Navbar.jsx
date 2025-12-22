@@ -34,7 +34,7 @@ function Navbar() {
   };
 
   return (
-    <header className="fixed top-0 left-0 w-full px-4.5 md:px-6.25 xl:px-28 py-2.5 md:py-8 flex items-center justify-between z-50">
+    <header className="max-w-384 mx-auto overflow-hidden fixed top-0 left-1/2 -translate-x-1/2 w-full px-4.5 md:px-6.25 xl:px-28 py-5 md:py-8 flex items-center justify-between z-50 header">
       <div>
         <Link
           to="/"

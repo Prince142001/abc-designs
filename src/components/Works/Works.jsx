@@ -6,7 +6,7 @@ import Projects from "./Projects";
 
 function Works() {
   return (
-    <div className="relative px-6 md:px-28 py-14 md:py-18">
+    <div className="relative px-4.5 md:px-6.25 lg:px-28 py-14 md:py-18">
       <div
         className="absolute inset-0 bottom-0 md:bottom-0 bg-no-repeat bg-center bg-cover -z-10  after:absolute after:w-full after:h-full after:bg-[#10101217] after:top-0 after:left-0"
         style={{
@@ -43,7 +43,7 @@ function Works() {
           <Projects />
         </div>
       </section>
-      <section id="expertise" className="mt-36 md:mt-72">
+      <section id="expertise" className="mt-36 md:mt-45 lg:mt-72">
         <Expertise />
       </section>
     </div>

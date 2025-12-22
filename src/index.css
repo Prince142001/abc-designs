@@ -80,6 +80,13 @@ html {
   stroke-dashoffset: -138px;
 }
 
+.header > div,
+.header > div > a > p,
+.header > div > a > p > span {
+  height: 20px !important;
+  /* background-color: red; */
+}
+
 .footer-max-milkin > p,
 .footer-max-milkin div {
   line-height: 7rem !important;
@@ -107,6 +114,12 @@ html {
   }
 }
 
+@media (min-width: 1024px) {
+  .pinned-section {
+    padding: 72px 112px 25px !important;
+  }
+}
+
 header div a p {
   line-height: 20px !important;
 }
@@ -119,14 +132,12 @@ header div a p {
 @media (min-width: 768px) {
   .about-section {
     padding: 72px 25px !important;
-    /* height: 63rem !important; */
   }
 }
 
 @media (min-width: 768px) {
   .about-section {
     padding: 140px 112px !important;
-    /* height: 63rem !important; */
   }
 }
 
@@ -138,4 +149,15 @@ input,
 textarea,
 select {
   cursor: text !important;
+}
+
+.awards-counter > div > div {
+  font-size: 400px !important;
+  line-height: 400px !important;
+}
+
+@media (min-width: 768px) {
+  .awards-counter > div > div {
+    font-size: 600px !important;
+  }
 }

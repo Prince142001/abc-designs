@@ -22,7 +22,7 @@ function Expertise() {
           </li>
         </ul>
 
-        <div className="mt-20 md:mt-40">
+        <div className="mt-20 md:mt-20 lg:mt-40">
           <ul className="flex items-center justify-center flex-col md:flex-row gap-x-10 gap-y-3.5">
             <li>
               <OnScrollText
@@ -54,38 +54,34 @@ function Expertise() {
           </ul>
         </div>
 
-        <div className="mt-32 space-y-3 md:space-y-5">
-          <ul className="flex items-center justify-center flex-col md:flex-row space-y-3 space-x-5">
-            <li>
+        <div className="mt-32 space-y-3 md:space-y-5 flex items-center justify-center">
+          <ul className="flex items-center justify-center flex-col flex-wrap md:flex-row space-y-3 space-x-0 md:space-x-5 w-full lg:w-1/2">
+            <li className="max-w-max w-max block grow">
               <p className="py-px px-5 text-[15.2px] text-center text-[#c2cabb] w-fit uppercase border border-[#3b4039] rounded-full bg-transparent cursor-pointer tracking-normal">
                 / Landing Pages
               </p>
             </li>
-            <li>
+            <li className="max-w-max w-max block grow">
               <p className="py-px px-5 text-[15.2px] text-center text-[#c2cabb] w-fit uppercase border border-[#3b4039] rounded-full bg-transparent cursor-pointer tracking-normal">
                 / Corporate Websites
               </p>
             </li>
-          </ul>
-          <ul className="flex items-center justify-center flex-col md:flex-row space-y-3 space-x-5">
-            <li>
+            <li className="max-w-max w-max block grow">
               <p className="py-px px-5 text-[15.2px] text-center text-[#c2cabb] w-fit uppercase border border-[#3b4039] rounded-full bg-transparent cursor-pointer tracking-normal">
                 / Personal Brand Sites
               </p>
             </li>
-            <li>
+            <li className="max-w-max w-max block grow">
               <p className="py-px px-5 text-[15.2px] text-center text-[#c2cabb] w-fit uppercase border border-[#3b4039] rounded-full bg-transparent cursor-pointer tracking-normal">
                 / E-commerce / Online Stores
               </p>
             </li>
-          </ul>
-          <ul className="flex items-center justify-center flex-col md:flex-row space-y-3 space-x-5">
-            <li>
+            <li className="max-w-max w-max block grow">
               <p className="py-px px-5 text-[15.2px] text-center text-[#c2cabb] w-fit uppercase border border-[#3b4039] rounded-full bg-transparent cursor-pointer tracking-normal">
                 / Showcase / Award Websites
               </p>
             </li>
-            <li>
+            <li className="max-w-max w-max block grow">
               <p className="py-px px-5 text-[15.2px] text-center text-[#c2cabb] w-fit uppercase border border-[#3b4039] rounded-full bg-transparent cursor-pointer tracking-normal">
                 / News & Communities
               </p>
