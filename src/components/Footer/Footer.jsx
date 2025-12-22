@@ -23,8 +23,8 @@ function Footer() {
   ];
 
   return (
-    <footer className="py-10">
-      <ul className="flex flex-row gap-18 justify-center items-center -tracking-wide">
+    <footer className="py-0 lg:py-10">
+      <ul className="flex flex-row  justify-between md:justify-center gap-0 md:gap-18 items-center -tracking-wide">
         {links.map((value) => (
           <li key={value}>
             <Text name={value} fontSize="text-[13.2px] font-semibold" />
@@ -35,11 +35,11 @@ function Footer() {
       <h2 className="mt-8 mb-0 flex items-center justify-center footer-max-milkin">
         <OnScrollText
           name="max milkin"
-          fontSize="text-9xl font-bebas-neue font-medium text-center uppercase"
+          fontSize="text-7xl md:text-9xl font-bebas-neue font-medium text-center uppercase"
         />
       </h2>
 
-      <ul className="mt-0 flex items-center justify-center gap-14">
+      <ul className="mt-0 flex items-center justify-between md:justify-center gap-0 md:gap-14">
         {socialMedia.map((item) => (
           <li key={item.name}>
             <a
@@ -70,26 +70,34 @@ function Footer() {
       <h2 className="flex items-center justify-center gap-3 mt-8">
         <OnScrollText
           name="creative frontend developer"
-          fontSize="text-7xl font-semibold text-center uppercase text-black/70"
+          fontSize="text-3xl md:text-4xl lg:text-7xl font-semibold text-center uppercase text-black/70"
         />
       </h2>
 
-      <ul className="mt-10 flex items-center justify-between">
+      <div className="block md:hidden mt-6">
+        <p className="text-xs font-medium text-center text-black/80 uppercase flex items-center justify-center">
+          <span>website design -</span>
+          <a href="https://princevish.oakteak.in/">
+            <AnimatedUnderline text="Prince Vishwakarma" />
+          </a>
+        </p>
+      </div>
+      <ul className="mt-5 md:mt-10 flex items-center justify-between">
         <li>
           <p className="text-xs font-medium text-left text-black/80">
             2025 .All right reserved. Max Milkin
           </p>
         </li>
-        <li>
-          <p className="text-xs font-medium text-left text-black/80 uppercase">
-            website design -
+        <li className="hidden md:block">
+          <p className="text-xs font-medium text-left text-black/80 uppercase flex">
+            <span>website design -</span>
             <a href="https://princevish.oakteak.in/">
               <AnimatedUnderline text="Prince Vishwakarma" />
             </a>
           </p>
         </li>
         <li className="text-[12.2px] font-medium border border-black px-3 py-0.5 rounded-full overflow-hidden flex items-center justify-center gap-1.5">
-          dev <HeartbeatDot />
+          fnsh <HeartbeatDot />
         </li>
       </ul>
     </footer>

@@ -396,33 +396,22 @@ const OnScrollShuffle = ({
 
         if (animationMode === "evenodd") {
           const odd = strips.filter((_, i) => i % 2 === 1);
-
           const even = strips.filter((_, i) => i % 2 === 0);
-
           const oddTotal = duration + Math.max(0, odd.length - 1) * stagger;
-
           const evenStart = odd.length ? oddTotal * 0.7 : 0;
-
           if (odd.length) addTween(odd, 0);
-
           if (even.length) addTween(even, evenStart);
         } else {
           strips.forEach((strip) => {
             const d = Math.random() * maxDelay;
-
             tl.to(
               strip,
-
               {
                 x: parseFloat(strip.getAttribute("data-final-x") || "0"),
-
                 duration,
-
                 ease,
-
                 force3D: true,
               },
-
               d
             );
 

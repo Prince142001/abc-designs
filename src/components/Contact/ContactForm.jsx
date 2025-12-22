@@ -90,18 +90,18 @@ function ContactForm() {
           }}
         />
 
-        <div className="relative z-10 pt-38 px-8 flex flex-col items-center justify-center">
-          <header className="relative w-1/2 after:absolute after:-bottom-8 after:left-1/2 after:-translate-x-1/2 after:w-24 after:h-[2.5px] after:bg-black">
-            <p className="text-[11.2px] font-medium text-white text-center">
+        <div className="relative z-10 pt-10 md:pt-24 lg:pt-38 px-0 md:px-8 flex flex-col items-center justify-center">
+          <header className="relative w-full md:w-3/4 lg:w-1/2 after:absolute after:-bottom-8 after:left-1/2 after:-translate-x-1/2 after:w-24 after:h-0 lg:after:h-[2.5px] after:bg-black">
+            <p className="text-[11.2px] font-medium text-black lg:text-white text-center">
               [&nbsp;N.006&nbsp;]
             </p>
-            <p className="mt-4 text-[11.2px] font-medium text-black uppercase text-center">
+            <p className="mt-4 md:mt-6 text-[11.2px] font-medium text-white lg:text-black uppercase text-center">
               ( contact form. )
             </p>
 
             <OnClickShuffle
               text="lets make your project special"
-              className="text-3xl font-semibold uppercase tracking-wide text-center mt-6"
+              className="text-3xl font-semibold uppercase tracking-wide text-center mt-6 w-full flex flex-wrap"
               tag="h2"
               shuffleDirection="right"
               duration={0.35}
@@ -114,7 +114,7 @@ function ContactForm() {
             />
           </header>
 
-          <div className="w-90 mt-40">
+          <div className="w-90 mt-8 md:mt-14 lg:mt-40">
             <form className="w-full space-y-6">
               <input
                 type="text"
@@ -202,7 +202,7 @@ function ContactForm() {
           </div>
         </div>
       </section>
-      <footer className="px-28 pt-32 pb-8">
+      <footer className="px-6 xl:px-28 pt-32 pb-4 md:pb-8">
         <Footer />
       </footer>
     </div>
