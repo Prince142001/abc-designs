@@ -54,7 +54,7 @@ function About() {
   return (
     <section
       ref={sectionRef}
-      className="about-section relative w-full min-h-screen bg-[#10120f] text-3xl px-4.5 md:px-6.25 lg:px-28 py-20 md:pt-20 md:pb-40"
+      className="about-section relative w-full min-h-screen bg-[#10120f] text-3xl px-4.5 md:px-6.25 lg:px-28 py-20 md:pt-20 md:pb-40 overflow-hidden"
     >
       <div className="absolute top-[30%] md:top-2/5 lg:top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[90%] z-10">
         <StaggeredSlideUpGroup

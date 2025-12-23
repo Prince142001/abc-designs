@@ -62,7 +62,7 @@ export default function PinnedSection() {
   return (
     <section
       ref={sectionRef}
-      className="relative h-screen w-full flex items-center justify-center text-black text-3xl px-6 md:px-10 xl:px-28 py-14 md:pt-18 md:pb-10 xl:py-18 pinned-section"
+      className="relative h-screen w-full flex items-center justify-center text-black text-3xl px-6 md:px-10 xl:px-28 py-14 md:pt-18 md:pb-10 xl:py-18 overflow-hidden pinned-section"
       style={{ backgroundColor: "#434948" }}
     >
       <div
